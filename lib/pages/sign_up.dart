@@ -1,4 +1,5 @@
 import 'package:crypto/crypto.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:mysql_client/mysql_protocol.dart';
 import 'package:crypto/src/sha256.dart' as sha;
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
+import 'package:project_flutter/pages/signup_after.dart';
 
 void main() => runApp(Sign_up());
 
@@ -68,6 +70,7 @@ class _Sign_upState extends State<Sign_up> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
         child: AppBar(
@@ -101,7 +104,7 @@ class _Sign_upState extends State<Sign_up> {
                     labelText: "아이디를 입력해주세요.",
                     border: OutlineInputBorder(),
                     hintText: 'ID'),
-                validator: (id) {
+                validator: (String? id) {
                   if (id!.isEmpty) {
                     return "아이디를 입력해주세요.";
                   }
@@ -120,7 +123,7 @@ class _Sign_upState extends State<Sign_up> {
                     labelText: "회원가입할 비밀번호를 입력해주세요.",
                     border: OutlineInputBorder(),
                     hintText: 'password'),
-                validator: (password) {
+                validator: (String? password) {
                   if (password!.isEmpty) {
                     return "비밀번호를 입력해주세요.";
                   }
@@ -229,7 +232,7 @@ class _Sign_upState extends State<Sign_up> {
                     insertData();
                     print("정상적으로 회원가입이 되었습니다.");
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                        MaterialPageRoute(builder: (context) => Signup_after()));
                   },
                   child: Text('회원가입'),
                 ),
