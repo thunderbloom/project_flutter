@@ -1,5 +1,6 @@
 class Historyitem {
   dynamic id;
+  // ignore: non_constant_identifier_names
   String serial_number;
   String topic;
   String status;
@@ -12,5 +13,4 @@ class Historyitem {
     required this.status,
     required this.Datetime
   });
-
 }
