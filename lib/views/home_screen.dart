@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(backgroundColor: Color(0xff1160aa)),
       body: SafeArea(
         child: Obx(() => globalController.checkLoading().isTrue
             ? const Center(

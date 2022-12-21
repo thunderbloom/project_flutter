@@ -13,6 +13,10 @@ import 'package:project_flutter/pages/mysql.dart';
 import 'package:crypto/src/sha256.dart' as sha;
 import 'package:project_flutter/pages/main_page.dart';
 import 'package:project_flutter/views/home_screen.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:project_flutter/mqtt/mqtt_client_connect.dart';
+
 
 void main() => runApp(LoginPage());
 
@@ -27,27 +31,39 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  
+
 
   Future singIn() async {
+
     await db.getConnection().then((conn) async {
       await conn
-          .query("SELECT Password FROM User WHERE ID = '${idController.text}'")
+          .query("SELECT Password FROM User WHERE user_id = '${idController.text}'")
           .then((password) {
         id:
         idController.text.toString();
         password:
         passwordController.text.toString();
       });
-    });
+    });   
   }
 
   Future<List<Profiles>> getSQLData() async {
     final List<Profiles> profileList = [];
     final Mysql db = Mysql();
+    late MqttClient client;
+    var topic = "house/door";
+
+    // await connect().then((value) {
+    //                   client = value;
+    //                 });
+    
+    // await client.subscribe(topic, MqttQos.atLeastOnce);
+ 
     await db.getConnection().then((conn) async {
       String test = idController.text.toString();
       await conn
-          .query("SELECT Password FROM User WHERE ID = '${idController.text}'")
+          .query("SELECT Password FROM User WHERE user_id = '${idController.text}'")
           .then((result) {
         String pass = result.toString();
         String test_pass = passwordController.text.toString();
@@ -61,6 +77,11 @@ class _LoginPageState extends State<LoginPage> {
           print("패스워드 일치");
           Navigator.push(context,
               MaterialPageRoute(builder: (BuildContext context) => Loding()));
+          
+          connect().then((value) {  // ------------------------MQTT 연결
+                      client = value;
+                    });
+          client.subscribe(topic, MqttQos.atLeastOnce);
         } else
           setState(() {
             print("패스워드 불일치");
@@ -136,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
     final loginButton = Padding(
         padding: EdgeInsets.all(20.0),
         child: GestureDetector(
-          onTap: singIn,
+          onTap: singIn, 
           child: MaterialButton(
             minWidth: 200.0,
             height: 48.0,
@@ -159,10 +180,12 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Sign_up()));
             }),
-        TextButton( 
+        TextButton(
             onPressed: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ForgotPasswordPage()));
             },
             child: Text('비밀번호 찾기',
                 style: TextStyle(color: Color.fromARGB(214, 0, 0, 0))))
@@ -201,123 +224,125 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  FutureBuilder<List> getDBdata() {
-    return FutureBuilder<List>(builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        return Text(snapshot.error.toString());
-      }
-      return MaterialApp(
-        title: 'Login',
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: Container(
-              padding: EdgeInsets.fromLTRB(20, 120, 20, 120),
-              child: Column(
-                children: <Widget>[
-                  Hero(
-                      tag: 'Hero',
-                      child: CircleAvatar(
-                        child: Image.asset('assets/images/temp_logo.jpg'),
-                        backgroundColor: Colors.transparent,
-                        radius: 58.0,
-                      )),
-                  SizedBox(height: 45.0),
-                  TextFormField(
-                    controller: idController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: '아이디', border: OutlineInputBorder()),
-                  ),
-                  SizedBox(height: 15.0),
-                  TextFormField(
-                    controller: passwordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        hintText: '비밀번호', border: OutlineInputBorder()),
-                  ),
-                  SizedBox(width: 10.0),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff1160aa),
-                        foregroundColor: Colors.white),
-                    child: Text('로그인'),
-                    onPressed: () {
-                      getSQLData();
-                    },
-                  ),
-                  SizedBox(width: 10.0),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff1160aa),
-                        foregroundColor: Colors.white),
-                    child: Text('회원가입'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Sign_up()),
-                      );
-                    },
-                  ),
-                  SizedBox(width: 10.0),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff1160aa),
-                        foregroundColor: Colors.white),
-                    child: Text('기기등록'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DevicePage()),
-                      );
-                    },
-                  ),
-                  SizedBox(width: 10.0),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff1160aa),
-                        foregroundColor: Colors.white),
-                    child: Text('회원정보'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UserData()),
-                      );
-                    },
-                  ),
-                  // SizedBox(width: 10.0),
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Color(0xff1160aa),
-                  //       foregroundColor: Colors.white),
-                  //   child: Text('디바이스정보'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => DeviceData()),
-                  //     );
-                  //   },
-                  // ),
-                  SizedBox(width: 10.0),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff1160aa),
-                        foregroundColor: Colors.white),
-                    child: Text('날씨'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
-                    },
-                  ),
-                ],
-              )),
-        ),
-      );
-    });
-  }
+//---------------------------------------------------삭제--------------------
+  // FutureBuilder<List> getDBdata() {
+  //   return FutureBuilder<List>(builder: (context, snapshot) {
+  //     if (snapshot.connectionState == ConnectionState.waiting) {
+  //       return const CircularProgressIndicator();
+  //     } else if (snapshot.hasError) {
+  //       return Text(snapshot.error.toString());
+  //     }
+  //     return MaterialApp(
+  //       title: 'Login',
+  //       debugShowCheckedModeBanner: false,
+  //       home: Scaffold(
+  //         body: Container(
+  //             padding: EdgeInsets.fromLTRB(20, 120, 20, 120),
+  //             child: Column(
+  //               children: <Widget>[
+  //                 Hero(
+  //                     tag: 'Hero',
+  //                     child: CircleAvatar(
+  //                       child: Image.asset('assets/images/temp_logo.jpg'),
+  //                       backgroundColor: Colors.transparent,
+  //                       radius: 58.0,
+  //                     )),
+  //                 SizedBox(height: 45.0),
+  //                 TextFormField(
+  //                   controller: idController,
+  //                   keyboardType: TextInputType.emailAddress,
+  //                   decoration: InputDecoration(
+  //                       hintText: '아이디', border: OutlineInputBorder()),
+  //                 ),
+  //                 SizedBox(height: 15.0),
+  //                 TextFormField(
+  //                   controller: passwordController,
+  //                   keyboardType: TextInputType.visiblePassword,
+  //                   obscureText: true,
+  //                   decoration: InputDecoration(
+  //                       hintText: '비밀번호', border: OutlineInputBorder()),
+  //                 ),
+  //                 SizedBox(width: 10.0),
+  //                 ElevatedButton(
+  //                   style: ElevatedButton.styleFrom(
+  //                       backgroundColor: Color(0xff1160aa),
+  //                       foregroundColor: Colors.white),
+  //                   child: Text('로그인'),
+  //                   onPressed: () {
+  //                     getSQLData();
+  //                   },
+  //                 ),
+  //                 SizedBox(width: 10.0),
+  //                 ElevatedButton(
+  //                   style: ElevatedButton.styleFrom(
+  //                       backgroundColor: Color(0xff1160aa),
+  //                       foregroundColor: Colors.white),
+  //                   child: Text('회원가입'),
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => Sign_up()),
+  //                     );
+  //                   },
+  //                 ),
+  //                 SizedBox(width: 10.0),
+  //                 ElevatedButton(
+  //                   style: ElevatedButton.styleFrom(
+  //                       backgroundColor: Color(0xff1160aa),
+  //                       foregroundColor: Colors.white),
+  //                   child: Text('기기등록'),
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => DevicePage()),
+  //                     );
+  //                   },
+  //                 ),
+  //                 SizedBox(width: 10.0),
+  //                 ElevatedButton(
+  //                   style: ElevatedButton.styleFrom(
+  //                       backgroundColor: Color(0xff1160aa),
+  //                       foregroundColor: Colors.white),
+  //                   child: Text('회원정보'),
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => UserData()),
+  //                     );
+  //                   },
+  //                 ),
+  //                 //----------------------------
+  //                 // SizedBox(width: 10.0),
+  //                 // ElevatedButton(
+  //                 //   style: ElevatedButton.styleFrom(
+  //                 //       backgroundColor: Color(0xff1160aa),
+  //                 //       foregroundColor: Colors.white),
+  //                 //   child: Text('디바이스정보'),
+  //                 //   onPressed: () {
+  //                 //     Navigator.push(
+  //                 //       context,
+  //                 //       MaterialPageRoute(builder: (context) => DeviceData()),
+  //                 //     );
+  //                 //   },
+  //                 // ),
+  //                 // SizedBox(width: 10.0),
+  //                 // ElevatedButton(
+  //                 //   style: ElevatedButton.styleFrom(
+  //                 //       backgroundColor: Color(0xff1160aa),
+  //                 //       foregroundColor: Colors.white),
+  //                 //   child: Text('날씨'),
+  //                 //   onPressed: () {
+  //                 //     Navigator.push(
+  //                 //       context,
+  //                 //       MaterialPageRoute(builder: (context) => HomeScreen()),
+  //                 //     );
+  //                 //   },
+  //                 // ),
+  //               ],
+  //             )),
+  //       ),
+  //     );
+  //     }
+  //   );
+  // }
 }

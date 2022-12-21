@@ -15,6 +15,7 @@ class DiscoverCard extends StatelessWidget {
   final Widget? vectorTop;
   final Function? onTap;
   final String? tag;
+  final Widget? icons;
   const DiscoverCard(
       {Key? key,
       this.title,
@@ -26,7 +27,10 @@ class DiscoverCard extends StatelessWidget {
       this.vectorBottom,
       this.vectorTop,
       this.onTap,
-      this.tag})
+      this.tag,
+      this.icons,
+      required SvgAsset icon,
+      required List<SvgAsset> children})
       : super(key: key);
 
   @override
@@ -48,30 +52,36 @@ class DiscoverCard extends StatelessWidget {
               end: Alignment.topRight,
             ),
           ),
-          
           child: Container(
-            height: 176.w,
-            width: 305.w,
+            height: 190,
+            width: 320,
+            //------------
+            //decoration: BoxDecoration(
+            //  image: DecorationImage(
+            //    fit: BoxFit.cover,
+            //    image: AssetImage('assets/icons/background1.png'),
+            //  ),
+            //),
             child: Stack(
               children: [
                 vectorBottom ??
                     ClipRRect(
                       borderRadius: BorderRadius.circular(26),
                       child: SvgAsset(
-                          height: 176.w,
-                          width: 305.w,
+                          height: 190,
+                          width: 320,
                           assetName: AssetName.vectorBottom),
                     ),
                 vectorTop ??
                     ClipRRect(
                       borderRadius: BorderRadius.circular(26),
                       child: SvgAsset(
-                          height: 176.w,
-                          width: 305.w,
+                          height: 190,
+                          width: 320,
                           assetName: AssetName.vectorTop),
                     ),
                 Padding(
-                  padding: EdgeInsets.only(left: 24.w, top: 24.h, bottom: 24.h),
+                  padding: EdgeInsets.only(left: 24, top: 24, bottom: 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,20 +96,20 @@ class DiscoverCard extends StatelessWidget {
                               child: Text(
                                 title!,
                                 style: TextStyle(
-                                    fontSize: 22.w,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
                             ),
                           ),
                           SizedBox(
-                            height: 5.h,
+                            height: 5,
                           ),
                           subtitle != null
                               ? Text(
                                   subtitle!,
                                   style: TextStyle(
-                                      fontSize: 16.w,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w300,
                                       color: Colors.white),
                                 )
@@ -108,19 +118,20 @@ class DiscoverCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          SvgAsset(
-                            assetName: AssetName.headphone,
-                            height: 24.w,
-                            width: 24.w,
-                          ),
-                          SizedBox(width: 24.w),
-                          SvgAsset(
-                            assetName: AssetName.tape,
-                            height: 24.w,
-                            width: 24.w,
-                          ),
+                          icons ??
+                              SvgAsset(
+                                assetName: AssetName.headphone,
+                                height: 24,
+                                width: 24,
+                              ),
+                          //    SizedBox(width: 24),
+                          //    SvgAsset(
+                          //      assetName: AssetName.sensor,
+                          //      height: 24,
+                          //      width: 24,
+                          //    ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

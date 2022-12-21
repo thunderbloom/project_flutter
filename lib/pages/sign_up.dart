@@ -43,7 +43,7 @@ class _Sign_upState extends State<Sign_up> {
     Digest encrpyted_password = encrypt();
     db.getConnection().then((conn) {
       String sqlQuery =
-          'INSERT into User (ID, Password, Name, Phone_Number, Address, Email) values (?, ?, ?, ?, ?, ?)';
+          'INSERT into User (user_id, password, name, phone_number, address, email) values (?, ?, ?, ?, ?, ?)';
       conn.query(sqlQuery, [
         idController.text,
         encrpyted_password.toString(), // 암호화 된 비밀번호
@@ -104,8 +104,8 @@ class _Sign_upState extends State<Sign_up> {
                     labelText: "아이디를 입력해주세요.",
                     border: OutlineInputBorder(),
                     hintText: 'ID'),
-                validator: (String? id) {
-                  if (id!.isEmpty) {
+                validator: (String? user_id) {
+                  if (user_id!.isEmpty) {
                     return "아이디를 입력해주세요.";
                   }
                   return null;
