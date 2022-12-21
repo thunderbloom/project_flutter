@@ -3,32 +3,29 @@ import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
 
-class UserData extends StatefulWidget {
-  const UserData({
+class VideoData extends StatefulWidget {
+  const VideoData({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<UserData> createState() => _UserDataState();
+  State<VideoData> createState() => _VideoDataState();
 }
 
-class _UserDataState extends State<UserData> {
-  Future<List<Profiles>> getSQLData() async {
-    final List<Profiles> profileList = [];
+class _VideoDataState extends State<VideoData> {
+  Future<List<Video>> getSQLData() async {
+    final List<Video> videoList = [];
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
-      String sqlQuery =
-          //'select ID, password, name, phonenumber, address, email from User';
-          'select user_id, password, email from User';
+      String sqlQuery = 'select file_name, Datetime from Video';
       await conn.query(sqlQuery).then((result) {
         for (var res in result) {
-          final profileModel = Profiles(
-              user_id: res["user_id"],
-              password: res["password"],
-              //name: res["name"],
-              //phonenumber: res["phonenumber"],
-              email: res["email"]);
-          profileList.add(profileModel);
+          final videoModel = Video(
+            // id: res["id"],
+            file_name: res["file_name"],
+            // Datetime: res["Datetime"],
+          );
+          videoList.add(videoModel);
         }
       }).onError((error, stackTrace) {
         print(error);
@@ -36,14 +33,16 @@ class _UserDataState extends State<UserData> {
       });
       conn.close();
     });
-    return profileList;
+    return videoList;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("video")),
       body: Center(
         child: getDBData(),
+        //
       ),
     );
   }
@@ -63,20 +62,21 @@ class _UserDataState extends State<UserData> {
               final data = snapshot.data as List;
               return ListTile(
                 leading: Text(
-                  data[index].user_id.toString(),
-                  style: const TextStyle(fontSize: 25),
-                ),
-                title: Text(
-                  data[index].email.toString(),
+                  data[index].file_name.toString(),
                   style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(
-                  data[index].password.toString(),
-                  style: const TextStyle(fontSize: 20),
-                ),
+                //title: Text(
+                //  data[index].Datetime.toString(),
+                //  style: const TextStyle(
+                //    fontSize: 20,
+                //    fontWeight: FontWeight.bold,
+                //  ),
+                //),
+                //subtitle: Text(
+                //  data[index].Datetime.toString(),
+                //  style: const TextStyle(fontSize: 20),
+                //),
               );
             },
           );

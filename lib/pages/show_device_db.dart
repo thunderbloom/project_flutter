@@ -18,13 +18,13 @@ class _DeviceDataState extends State<DeviceData> {
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
       String sqlQuery =
-          'select id, Serial_Number, Model_Name, Device_Name from Device';
+          'select user_id, serial_number, device_Name from Device';
       await conn.query(sqlQuery).then((result) {
         for (var res in result) {
           final deviceModel = Devices(
-            id: res["id"],
-            Serial_Number: res["Serial_Number"],
-            Model_Name: res["Model_Name"],
+            user_id: res["user_id"],
+            serial_number: res["serial_number"],
+            device_name: res["device_name"],
             //Device_Name: res["Device_Name"],
           );
           deviceList.add(deviceModel);
@@ -41,6 +41,7 @@ class _DeviceDataState extends State<DeviceData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Device')),
       body: Center(
         child: getDBData(),
       ),
@@ -62,18 +63,18 @@ class _DeviceDataState extends State<DeviceData> {
               final data = snapshot.data as List;
               return ListTile(
                 leading: Text(
-                  data[index].id.toString(),
+                  data[index].user_id.toString(),
                   style: const TextStyle(fontSize: 25),
                 ),
                 title: Text(
-                  data[index].Serial_Number.toString(),
+                  data[index].serial_Number.toString(),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  data[index].Model_Name.toString(),
+                  data[index].device_name.toString(),
                   style: const TextStyle(fontSize: 20),
                 ),
               );

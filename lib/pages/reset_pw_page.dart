@@ -25,18 +25,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final List<Profiles> profileList = [];
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
-      String test1 = idController.text.toString(); // id
+      // String test1 = idController.text.toString(); // id
       String test2 = emailController.text.toString(); // email
 
       await conn
-          .query("SELECT Email FROM User WHERE ID = '${idController.text}'") // email 
+          .query("SELECT email FROM User WHERE user_id = '${idController.text}'") // email 
           .then((result) {
         // email
         String pass = result.toString(); // email
-        String test_pass = idController.text.toString(); // email
-        print("email" + test_pass);
+       // String test_pass = idController.text.toString(); // user_id
+        String email = pass.substring(17, pass.length - 2);
 
-        if (test2 == test_pass) {
+        // print("email" + email);
+        // print("email" + test2);
+        // print(test2+ '=' + email);
+
+        if (test2 == email) {
           print("회원 정보 일치");
           Navigator.push(
               context,

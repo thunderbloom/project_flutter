@@ -3,32 +3,30 @@ import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
 
-class UserData extends StatefulWidget {
-  const UserData({
+class HistoryData extends StatefulWidget {
+  const HistoryData({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<UserData> createState() => _UserDataState();
+  State<HistoryData> createState() => _HistoryDataState();
 }
 
-class _UserDataState extends State<UserData> {
-  Future<List<Profiles>> getSQLData() async {
-    final List<Profiles> profileList = [];
+class _HistoryDataState extends State<HistoryData> {
+  Future<List<History>> getSQLData() async {
+    final List<History> historyList = [];
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
       String sqlQuery =
-          //'select ID, password, name, phonenumber, address, email from User';
-          'select user_id, password, email from User';
+          'select sensor, status, datetime from History where user_id="test9999" order by datetime DESC';
       await conn.query(sqlQuery).then((result) {
         for (var res in result) {
-          final profileModel = Profiles(
-              user_id: res["user_id"],
-              password: res["password"],
-              //name: res["name"],
-              //phonenumber: res["phonenumber"],
-              email: res["email"]);
-          profileList.add(profileModel);
+          final historyModel = History(
+            sensor: res["sensor"],
+            status: res["status"],
+            datetime: res["datetime"],
+          );
+          historyList.add(historyModel);
         }
       }).onError((error, stackTrace) {
         print(error);
@@ -36,12 +34,13 @@ class _UserDataState extends State<UserData> {
       });
       conn.close();
     });
-    return profileList;
+    return historyList;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("History")),
       body: Center(
         child: getDBData(),
       ),
@@ -63,20 +62,21 @@ class _UserDataState extends State<UserData> {
               final data = snapshot.data as List;
               return ListTile(
                 leading: Text(
-                  data[index].user_id.toString(),
-                  style: const TextStyle(fontSize: 25),
+                  data[index].sensor.toString(),
+                  style: const TextStyle(fontSize: 20),
                 ),
                 title: Text(
-                  data[index].email.toString(),
+                  data[index].status.toString(),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  data[index].password.toString(),
+                  data[index].datetime.toString(),
                   style: const TextStyle(fontSize: 20),
                 ),
+                
               );
             },
           );
