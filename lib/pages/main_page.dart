@@ -4,6 +4,9 @@ import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:get/get.dart';
 import 'package:project_flutter/controllers/global_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:project_flutter/main.dart';
+import 'package:project_flutter/pages/login_page.dart';
+import 'package:project_flutter/pages/mypage.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
 import 'package:project_flutter/pages/show_video_db.dart';
 import 'package:project_flutter/widgets/current_weather_widget.dart';
@@ -19,10 +22,9 @@ import 'package:project_flutter/widgets/discover_card.dart';
 import 'package:project_flutter/widgets/svg_asset.dart';
 import 'package:project_flutter/widgets/icons.dart';
 import 'package:badges/badges.dart';
-
 import 'package:project_flutter/pages/show_history_db.dart';
-
-// import 'package:project_flutter/views/home_screen.dart';
+import 'package:project_flutter/pages/mypage.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 class Loding extends StatefulWidget {
   const Loding({Key? key}) : super(key: key);
@@ -32,12 +34,12 @@ class Loding extends StatefulWidget {
 
 class _LodingState extends State<Loding> {
   @override
-  int _counter = 0;
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  //int _counter = 0;
+  //void _incrementCounter() {
+  //  setState(() {
+  //    _counter++;
+  //  });
+  //}
 
   //bool showElevatedButtonBadge = true;
 
@@ -45,37 +47,148 @@ class _LodingState extends State<Loding> {
   int pageIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  //-----------------------------------------------
+
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);
-  //-----------------------------------------------
+
   final RxBool _isLoading = true.obs;
-  //-------------------------------------
-  //static const List<Widget> _widgetOptions = <Widget>[
-  //  Text(
-  //    'Index 0: Menu',
-  //    style: optionStyle,
-  //  ),
-  //  Text(
-  //    'Index 1: 알림',
-  //    style: optionStyle,
-  //  ),
-  //  Text(
-  //    'Index 2: My page',
-  //    style: optionStyle,
+
+  //static final List<GetPage> pages = [
+  //// ...
+  //  GetPage(
+  //    name: SearchScreen.name,
+  //    page: () => DrawerScreen(),
+  //    binding: SearchBarBinding(),
   //  ),
   //];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   Widget build(BuildContext context) {
     return GetMaterialApp(
       home: Scaffold(
-        appBar: AppBar(backgroundColor: Color(0xff1160aa)), //보류 (필요없을거같음)
+        appBar: AppBar(
+          title: Text('윈가드'),
+          centerTitle: true, // 중앙 정렬
+          elevation: 0.0,
+          actions: <Widget>[
+            //IconButton(
+            //  icon: Icon(Icons.shopping_cart), // 카트 아이콘 생성
+            //  onPressed: () {
+            //    // 아이콘 버튼 실행
+            //    print('Shopping cart button is clicked');
+            //  },
+            //),
+            IconButton(
+              icon: Icon(Icons.search), // 검색 아이콘 생성
+              onPressed: () {
+                // 아이콘 버튼 실행
+                print('Search button is clicked');
+              },
+            ),
+          ],
+          backgroundColor: Color(0xff1160aa),
+        ), //보류 (필요없을거같음)
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                currentAccountPicture: CircleAvatar(
+                  // 현재 계정 이미지 set
+                  backgroundImage: AssetImage('assets/weather/01d.png'),
+                  backgroundColor: Colors.white,
+                ),
+                //otherAccountsPictures: <Widget>[
+                //  // 다른 계정 이미지[] set
+                //  CircleAvatar(
+                //    backgroundColor: Colors.white,
+                //    backgroundImage: AssetImage('assets/weather/01d.png'),
+                //  ),
+                //],
+                accountName: Text('team3'),
+                accountEmail: Text('logenzes@gmail.com'),
+                onDetailsPressed: () {
+                  print('arrow is clicked');
+                },
+                decoration: BoxDecoration(
+                    color: Color(0xff1160aa), //s.red[200],
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(40.0),
+                        bottomRight: Radius.circular(40.0))),
+              ),
+              ListTile(
+                  leading: Icon(
+                    Icons.account_circle,
+                    color: Colors.grey[850],
+                  ),
+                  title: Text('회원정보 수정'),
+                  onTap: mypage
+                  //() {
+                  //  Navigator.push(context,
+                  //      MaterialPageRoute(builder: (context) => MyPage4()));
+                  //  //print('회원정보 수정 is clicked');
+                  //},
+                  //trailing: Icon(Icons.add),
+                  ),
+              ListTile(
+                leading: Icon(
+                  Icons.settings,
+                  color: Colors.grey[850],
+                ),
+                title: Text('환경설정'),
+                onTap: () {
+                  print('환경설정 is clicked');
+                },
+                //trailing: Icon(Icons.add),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.support_agent,
+                  color: Colors.grey[850],
+                ),
+                title: Text('고객센터'),
+                onTap: () {
+                  print('고객센터 is clicked');
+                },
+                //trailing: Icon(Icons.add),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.report, //question_answer,
+                  color: Colors.grey[850],
+                ),
+                title: Text('공지사항'),
+                onTap: () {
+                  print('공지사항 is clicked');
+                },
+                //trailing: Icon(Icons.add),
+              ),
+              SizedBox(
+                height: 280,
+              ),
+              Divider(),
+              ListTile(
+                  leading: Icon(
+                    Icons.logout_rounded, //question_answer,
+                    color: Colors.grey[850],
+                  ),
+                  title: Text('로그아웃'),
+                  onTap: () {
+                    print('로그아웃 is clicked');
+                  }
+                  //() async{
+                  //  final prefs = await SharedPreferences.getInstance();
+                  //  prefs.setBool('isLoggedIn', false);
+                  //  Navigator.push(
+                  //      context,
+                  //      MaterialPageRoute(
+                  //          builder: (context) => LoginPage())); // 로그아웃
+                  //  //print('로그아웃 is clicked');
+                  //},
+                  //trailing: Icon(Icons.add),
+                  ),
+            ],
+          ),
+        ),
         backgroundColor: Colors.white,
 
         body: SafeArea(
@@ -142,7 +255,7 @@ class _LodingState extends State<Loding> {
                                 DiscoverCard(
                                   // tag: "sensor",
                                   onTap: sensor,
-                                  title: "sensor",
+                                  title: "알림내역",
                                   subtitle: "정보를 확인하세요!",
                                   icons: SvgAsset(
                                     assetName: AssetName.headphone,
@@ -212,54 +325,6 @@ class _LodingState extends State<Loding> {
                   ),
           ),
         ),
-
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.menu),
-              label: 'Menu',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: '알림',
-              //icon: Stack(
-              //  children: <Widget>[
-              //    Icon(Icons.notifications),
-              //    Positioned(
-              //      right:0,
-              //      child: Container(
-              //        padding: EdgeInsets.all(1),
-              //        decoration: BoxDecoration(
-              //          color: Colors.red,
-              //          borderRadius: BorderRadius.circular(6),
-              //        ),
-              //        constraints: BoxConstraints(
-              //          minWidth: 12,
-              //          minHeight: 12,
-              //        ),
-              //        child: Text('1'
-              //        style: TextStyle(
-              //          color:Colors.white,
-              //          fontSize: 8,
-              //        ),
-              //        textAlign: TextAlign.center,
-              //        ),
-              //      ),
-              //      ),
-              //  ],
-              //  ),
-              //  label: '알림'
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'My page',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color(0xff1160aa),
-          onTap: _onItemTapped,
-        ),
       ),
     );
   }
@@ -279,5 +344,9 @@ class _LodingState extends State<Loding> {
 
   void adddevice2() {
     Get.to(() => DeviceData(), transition: Transition.rightToLeft);
+  }
+
+  void mypage() {
+    Get.to(() => MyPage4(), transition: Transition.rightToLeft);
   }
 }

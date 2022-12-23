@@ -7,16 +7,26 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'dart:convert';
 
-
 import 'package:project_flutter/pages/mysql.dart';
+import 'package:project_flutter/pages/login_page.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+
+
 
 Future<MqttClient> connect() async {
+  final prefs = await SharedPreferences.getInstance();
+  final String? userid = prefs.getString('id'); 
+  print(userid);
   MqttServerClient client = 
     // MqttServerClient.withPort('34.64.233.244', 'test999', 19883);
     MqttServerClient.withPort('34.64.233.244', 'ayWebSocketClient_123456_33f7423c-a3b7-46b1-8a1a-26937e4a071f', 19883);
   client.logging(on : true);
   client.onConnected = onConnected;
-  
+  // var value = Get.arguments;
   client.onDisconnected =  onDisconnected;
   client.keepAlivePeriod =  65535;
   // client.onUnsubscribed = onUnsubscribed;
@@ -24,8 +34,10 @@ Future<MqttClient> connect() async {
   client.port = 19883;
   client.onSubscribeFail = onSubscribeFail;
   client.pongCallback = pong;
+
+
   
- 
+  
 
   final connMess = MqttConnectMessage()
       // .withClientIdentifier("test999")
@@ -49,10 +61,19 @@ Future<MqttClient> connect() async {
   if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('EMQX client connected');
     print("접속완료");
-    const topic = 'house/door';
+    // print(value);
+    // String value;
+    // var value = UserID; 
+    // var value2 = Get.arguments;
+    // print(value2);
     
-    // client.subscribe(topic, MqttQos.atLeastOnce);
-    client.subscribe('test9999', MqttQos.atLeastOnce);
+    // print(value);
+    // const topic = 'house/door';
+    
+
+
+    client.subscribe('$userid', MqttQos.atLeastOnce);
+    // client.subscribe('test9999', MqttQos.atLeastOnce);
     // client.subscribe('house/door', MqttQos.atLeastOnce);
     // client.subscribe('house/door1', MqttQos.atLeastOnce);
     // client.subscribe('house/door2', MqttQos.atLeastOnce);
@@ -70,8 +91,31 @@ Future<MqttClient> connect() async {
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       var jsonPt = json.decode(pt);
       // Map<String, dynamic> jsonPt = jsonDecode(pt);
-      final sensor = jsonPt["sensor"];
-      final status = jsonPt["status"];
+      var sensor = jsonPt["sensor"];      
+      // var sensor2 = '';
+      // var res = {'sensor':{'door sensor':'도어센서', 'camera':'카메라'}, 'status':{'door opened':'문열림', 'person detected':'사람인식'}};
+                  
+      var status = jsonPt["status"];
+      // var status2 = '';
+      // var sensor2 = '도어 센서';
+      // var status2 = '문열림';
+      // if (sensor=='door sensor'){
+      //   var sensor2 = '도어 센서';
+      // }
+      // else if (sensor=='camera'){
+      //   final sensor2 = '카메라';
+      // } 
+      
+      // if (status=='door opened'){
+      //   const status2 = '문열림';
+      // }
+      // else if (status=='person detected'){
+      //   const status2 = '사람 인식';
+      // }
+
+      //else {
+      //  //final sensor = '문닫힘';
+      //} 
       // print(payloadmsg);
       // final MqttMessage message = c[0].payload;
       // final payload = 
@@ -79,7 +123,7 @@ Future<MqttClient> connect() async {
       
       // print('Received message:$payload from topic: ${c[0].topic}>');
       NotificationService()
-      .showNotification(0, '새로운 알림이 있습니다.', '$sensor에서 $status 되었습니다',);
+      .showNotification(0, '새로운 알림이 있습니다.', '$sensor에서 $status이 감지되었습니다',);
       // .showNotification(0, '새로운 알림이 있습니다.', '${c[0].topic}에서 $status 되었습니다',);
       // NotificationService()
       // .showNotification(0, '새로운 알림이 있습니다.', '${c[0].topic}에서 움직임이 감지되었습니다',);

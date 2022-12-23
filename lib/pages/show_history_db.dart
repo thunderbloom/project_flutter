@@ -40,7 +40,8 @@ class _HistoryDataState extends State<HistoryData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("History")),
+      appBar: AppBar(title: Text("알림내역",),
+      backgroundColor: Color(0xff1160aa),),
       body: Center(
         child: getDBData(),
       ),
