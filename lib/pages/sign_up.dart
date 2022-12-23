@@ -10,6 +10,7 @@ import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
 import 'package:project_flutter/pages/signup_after.dart';
 
+
 void main() => runApp(Sign_up());
 
 class Sign_up extends StatefulWidget {
