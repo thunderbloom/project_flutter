@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
           String pass_decrypt = decrpyted_password.toString(); // 추가
           String userid = idController.text;
           prefs.setString('id', userid);
-          prefs.setString('password', pw);
+          // prefs.setString('password', pw);
           prefs.setBool('isLoggedIn', true);
           final String? userinfo = prefs.getString('id');
           // setState((){});
