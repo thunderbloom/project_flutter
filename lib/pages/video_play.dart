@@ -175,24 +175,38 @@ class _VideoPlayState extends State<VideoPlay> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final data = snapshot.data as List;
-              return ListTile(
-                leading: Text(
-                  data[index].file_name.toString(),
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                //title: Text(
-                //  data[index].Datetime.toString(),
-                //  style: const TextStyle(
-                //    fontSize: 20,
-                //    fontWeight: FontWeight.bold,
-                //  ),
-                //),
-                //subtitle: Text(
-                //  data[index].Datetime.toString(),
-                //  style: const TextStyle(fontSize: 20),
-                //),
-              );
+              return Card(
+                  child: Container(
+                      child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Text(
+                      data[index].file_name.toString(),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              )));
+              //return ListTile(
+              //  leading: Text(
+              //    data[index].file_name.toString(),
+              //    style: const TextStyle(
+              //        fontSize: 20, fontWeight: FontWeight.bold),
+              //  ),
+
+              //title: Text(
+              //  data[index].Datetime.toString(),
+              //  style: const TextStyle(
+              //    fontSize: 20,
+              //    fontWeight: FontWeight.bold,
+              //  ),
+              //),
+              //subtitle: Text(
+              //  data[index].Datetime.toString(),
+              //  style: const TextStyle(fontSize: 20),
+              //),
+              //);
             },
           );
         });
