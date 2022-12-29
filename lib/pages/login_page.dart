@@ -22,7 +22,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_flutter/pages/notification_service.dart';
 
 void main() => runApp(LoginPage());
-
+// Future<void> main() async {
+//       WidgetsFlutterBinding.ensureInitialized();
+//       SharedPreferences prefs = await SharedPreferences.getInstance();
+//       bool? id = prefs.getBool("id");
+//       // print("id:" + id.toString());
+//       runApp(MaterialApp(home: id == null ? LoginPage() : Loding()));
+//     }
 String userinfo = '';
 
 class LoginPage extends StatefulWidget {
@@ -43,26 +49,46 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  Future signIn() async {
-    await db.getConnection().then((conn) async {
-      await conn
-          .query(
-              "SELECT password FROM User WHERE user_id = '${idController.text}'")
-          .then((password) {
-        id:
-        idController.text.toString();
-        password:
-        passwordController.text.toString();
-      });
-    });
-  }
+  // late SharedPreferences logindata;
+  // late bool newuser;
+  // Future signIn() async {
+  //   await db.getConnection().then((conn) async {
+  //     await conn
+  //         .query(
+  //             "SELECT password FROM User WHERE user_id = '${idController.text}'")
+  //         .then((password) {
+  //       id:
+  //       idController.text.toString();
+  //       password:
+  //       passwordController.text.toString();
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
+    // check_if_already_login();
     getSQLData();
+    
   }
+  // String savedid = '';
+  // String savedpw = '';
+  // void check_if_already_login() async {
+  //   logindata = await SharedPreferences.getInstance();
+  //   newuser = (logindata.getBool('id') ?? true);
+  //   print(newuser);
+  //   if (newuser == false) {
+  //     Navigator.pushReplacement(
+  //         context, new MaterialPageRoute(builder: (context) => Loding()));
+  //   } else{
+  //     getSQLData();
+      // Navigator.pushReplacement(
+      //     context, new MaterialPageRoute(builder: (context) => getSQLData()));
+  //   }
+  // }
+
+
 
   Future<List<Profiles>> getSQLData() async {
     final List<Profiles> profileList = [];
@@ -72,68 +98,83 @@ class _LoginPageState extends State<LoginPage> {
     // await connect().then((value) {
     //                   client = value;
     //                 });
+    // savedid = prefs.getString("id")!;
+    // savedpw = prefs.getString("password")!;
 
+    // if (savedid != null && savedpw != null){
+    //       Navigator.push(context,
+    //           MaterialPageRoute(builder: (BuildContext context) => Loding()));
+    //           connect().then((value) {            
+    //             client = value;});
+    // } else {
     // await client.subscribe(topic, MqttQos.atLeastOnce);
     // NotificationService().init();
-    await db.getConnection().then((conn) async {
-      String test = idController.text.toString();
+      await db.getConnection().then((conn) async {
+        String test = idController.text.toString();
 
-      await conn
-          .query(
-              "SELECT Password FROM User WHERE user_id = '${idController.text}'")
-          .then((result) {
-        String pass = result.toString();
-        String test_pass = passwordController.text.toString();
-        String pw = pass.substring(20, pass.length - 2); // db에 저장된 비밀번호
+        await conn
+            .query(
+                "SELECT Password FROM User WHERE user_id = '${idController.text}'")
+            .then((result) {
+          String pass = result.toString();
+          String test_pass = passwordController.text.toString();
+          String pw = pass.substring(20, pass.length - 2); // db에 저장된 비밀번호
 
-        Digest decrpyted_password = decrypt(); //추가
+          Digest decrpyted_password = decrypt(); //추가
 
-        String pass_decrypt = decrpyted_password.toString(); // 추가
-        String userid = idController.text;
-        prefs.setString('id', userid);
-        final String? userinfo = prefs.getString('id');
-        // setState((){});
-        // prefs.setString('password', pw);
-        //print('$useridinfo');
+          String pass_decrypt = decrpyted_password.toString(); // 추가
+          String userid = idController.text;
+          prefs.setString('id', userid);
+          prefs.setString('password', pw);
+          prefs.setBool('isLoggedIn', true);
+          final String? userinfo = prefs.getString('id');
+          // setState((){});
+          // prefs.setString('password', pw);
+          //print('$useridinfo');
+          
 
-        if (pw == pass_decrypt) {
-          print("패스워드 일치");
-          print(userinfo);
-          // WidgetsBinding.instance.addPostFrameCallback((_) async {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) => Loding()));
+          
+            
+          if (pw == pass_decrypt) {
+            print("패스워드 일치");
+            print(userinfo);
+            // WidgetsBinding.instance.addPostFrameCallback((_) async {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) => Loding()));
 
-          connect().then((value) {
-            // ------------------------MQTT 연결
-            client = value;
-          });
-          print(userinfo);
-          // print("접속된 유저 id : $userid");
-          // client.subscribe('$userid', MqttQos.atLeastOnce);
+            connect().then((value) {
+              // ------------------------MQTT 연결
+              client = value;
+            });
+            print(userinfo);
+            // print("접속된 유저 id : $userid");
+            // client.subscribe('$userid', MqttQos.atLeastOnce);
 
-          // final userId = UserID(userid) ;
+            // final userId = UserID(userid) ;
 
-          // Get.to(UserID, arguments: userid);
-          // var arg = Get.arguments;
-          // Text('${Get.arguments}');
-          // client.subscribe(topic, MqttQos.atLeastOnce);
-          // client.subscribe(userid, MqttQos.atLeastOnce);
+            // Get.to(UserID, arguments: userid);
+            // var arg = Get.arguments;
+            // Text('${Get.arguments}');
+            // client.subscribe(topic, MqttQos.atLeastOnce);
+            // client.subscribe(userid, MqttQos.atLeastOnce);
 
-          // print('MQTT subscribed from Topic : ${idController.text}');
-          // });
-        } else
-          setState(() {
-            print("패스워드 불일치");
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("비밀번호가 틀립니다."),
-              duration: Duration(milliseconds: 700),
-            ));
-          });
+            // print('MQTT subscribed from Topic : ${idController.text}');
+            // });
+          } else
+            setState(() {
+              print("패스워드 불일치");
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("비밀번호가 틀립니다."),
+                duration: Duration(milliseconds: 700),
+              ));
+            });
+          
+        });
+        setState(() {
+          // final RxBool _isLoading = true.obs;
+        });
       });
-      setState(() {
-        // final RxBool _isLoading = true.obs;
-      });
-    });
+      // }
     return profileList;
   }
 
@@ -217,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
     final loginButton = Padding(
         padding: EdgeInsets.all(20.0),
         child: GestureDetector(
-          onTap: signIn,
+          // onTap: signIn,
           child: MaterialButton(
             minWidth: 200.0,
             height: 48.0,

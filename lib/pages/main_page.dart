@@ -36,8 +36,6 @@ import '../mqtt/mqtt_client_connect.dart';
 
 // String userinfo = login.userinfo;
 
-//String userinfo = '';
-
 class Loding extends StatefulWidget {
   const Loding({Key? key}) : super(key: key);
 
@@ -46,6 +44,7 @@ class Loding extends StatefulWidget {
 }
 
 class _LodingState extends State<Loding> {
+  //------------------------------------------로그인 정보 가져오기---------------//
   String userinfo = '';
   // String userid = '';
 
@@ -66,10 +65,10 @@ class _LodingState extends State<Loding> {
     try {
       setState(() {
         final String? userinfo = prefs.getString('id');
-        print('여기까진 잘 됨 $userinfo');
       });
     } catch (e) {}
   }
+  //-----------------------------------------------------------------여기까지---------------------
   // loadCounter() async {
   //   // SharedPreferences의 인스턴스를 필드에 저장
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -238,10 +237,12 @@ class _LodingState extends State<Loding> {
                 title: Text('로그아웃'),
                 onTap: () async {
                   // print('로그아웃 is clicked');
-                  // final prefs = await SharedPreferences.getInstance();
+                  final prefs = await SharedPreferences.getInstance();
                   //  prefs.setBool('isLoggedIn', false);
                   //  client.disconnect();
-                  //  prefs.remove('id');
+                  prefs.remove('id');
+                  prefs.setBool('isLoggedIn', false);
+                  // prefs.remove('password');
                   print('로그아웃');
                   //  WidgetsBinding.instance.addPostFrameCallback((_) async {
                   Navigator.pushAndRemoveUntil(

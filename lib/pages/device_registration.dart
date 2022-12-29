@@ -42,12 +42,11 @@ class _Device_regis extends State<Device_re> {
     setState(() {
       userinfo = prefs.getString('id')!;
     });
-    // print('여기까진 잘 됨 $userinfo');
+    
 
     try {
       setState(() {
-        final String? userinfo = prefs.getString('id');
-        print('여기까진 잘 됨 $userinfo');
+        final String? userinfo = prefs.getString('id');        
       });
     } catch (e) {}
   }
