@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:project_flutter/pages/device_registration.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/main.dart';
-import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/pages/mypage.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
 import 'package:project_flutter/pages/show_video_db.dart';
@@ -17,7 +16,6 @@ import 'package:project_flutter/widgets/current_weather_widget.dart';
 import 'package:project_flutter/widgets/header_widget.dart';
 import 'package:project_flutter/pages/video_play.dart';
 import 'package:project_flutter/views/home_screen.dart';
-import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project_flutter/widgets/discover_card.dart';
 import 'package:project_flutter/widgets/svg_asset.dart';
@@ -25,8 +23,6 @@ import 'package:project_flutter/widgets/icons.dart';
 import 'package:badges/badges.dart';
 import 'package:project_flutter/pages/show_history_db.dart';
 import 'package:project_flutter/pages/login_page.dart' as login;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:project_flutter/pages/mypage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_flutter/mqtt/mqtt_client_connect.dart' as mqtt;
 import 'package:mqtt_client/mqtt_client.dart';
@@ -184,14 +180,8 @@ class _LodingState extends State<Loding> {
                     Icons.account_circle,
                     color: Colors.grey[850],
                   ),
-                  title: Text('회원정보 수정'),
+                  title: Text('회원정보'),
                   onTap: mypage
-                  //() {
-                  //  Navigator.push(context,
-                  //      MaterialPageRoute(builder: (context) => MyPage4()));
-                  //  //print('회원정보 수정 is clicked');
-                  //},
-                  //trailing: Icon(Icons.add),
                   ),
               ListTile(
                 leading: Icon(
@@ -419,6 +409,6 @@ class _LodingState extends State<Loding> {
   }
 
   void mypage() {
-    Get.to(() => MyPage4(), transition: Transition.rightToLeft);
+    Get.to(() => MyPage(), transition: Transition.rightToLeft);
   }
 }

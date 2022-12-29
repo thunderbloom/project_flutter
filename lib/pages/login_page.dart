@@ -33,7 +33,7 @@ String userinfo = '';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
-  //,this.userinfo
+  //this.userinfo
   //final String? userinfo;
   @override
   State<LoginPage> createState() => _LoginPageState();
