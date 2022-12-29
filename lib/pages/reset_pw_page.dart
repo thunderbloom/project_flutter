@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter/pages/data_table.dart';
+import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/new_password_page.dart';
 
@@ -11,6 +12,8 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final db = Mysql();
+  final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final idController = TextEditingController();
 
@@ -21,25 +24,40 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     super.dispose();
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('정말로 나가시겠습니까?'),
+            content: new Text('뒤로가기를 원하시면 확인을 클릭하세요'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage())),
+                child: new Text('확인'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('취소'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   Future<List<Profiles>> authenticate() async {
     final List<Profiles> profileList = [];
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
-      // String test1 = idController.text.toString(); // id
       String test2 = emailController.text.toString(); // email
-
       await conn
-          .query("SELECT email FROM User WHERE user_id = '${idController.text}'") // email 
+          .query(
+              "SELECT email FROM User WHERE user_id = '${idController.text}'") // email
           .then((result) {
-        // email
         String pass = result.toString(); // email
-       // String test_pass = idController.text.toString(); // user_id
+
         String email = pass.substring(17, pass.length - 2);
-
-        // print("email" + email);
-        // print("email" + test2);
-        // print(test2+ '=' + email);
-
         if (test2 == email) {
           print("회원 정보 일치");
           Navigator.push(
@@ -60,78 +78,137 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return profileList;
   }
 
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple[200],
-        elevation: 0,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Text(
-              '아이디를 입력 해 주세요.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            backgroundColor: Color(0xff1160aa),
+            elevation: 0,
+            title: Column(
+              children: <Widget>[
+                Center(
+                  child: Text(
+                    '비밀번호 찾기',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      height: 1.7,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      fontFamily: 'Nanum Barumpen',
+                      fontStyle: FontStyle.normal,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
-              controller: idController,
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8, bottom: 4),
+                      child: TextFormField(
+                        controller: idController,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                            hintText: '아이디',
+                            contentPadding:
+                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(32.0))),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '다시 입력해주세요';
+                          } else if (value.length < 4) {
+                            return '글자수가 너무 적습니다. 4자리 이상 아이디를 입력하세요.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8, bottom: 4),
+                      child: TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                            hintText: '이메일',
+                            contentPadding:
+                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(32.0))),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '이메일을 입력해주세요';
+                          } else if (!value.contains("@") ||
+                              !value.contains(".")) {
+                            return "유효한 이메일을 입력해주세요";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    ElevatedButton(
+                      child: Text('비밀번호 찾기'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('알림'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+                                        Text('비밀번호를 변경하시겠습니까?'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('확인'),
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          toast(context, "비밀번호 찾기 완료!");
+                                          authenticate();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PassWordReset()));
+                                        }
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
+                        }
+                      },
+                    )
+                  ],
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                hintText: 'ID',
-                fillColor: Colors.grey[200],
-                filled: true,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Text(
-              '이메일 주소를 입력해 주세요.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.deepPurple),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                hintText: 'Email address',
-                fillColor: Colors.grey[200],
-                filled: true,
-              ),
-            ),
-          ),
-          MaterialButton(
-            onPressed: () {
-              authenticate();
-            },
-            child: Text('인증하기'),
-            color: Colors.deepPurple[200],
-          )
-        ],
-      ),
-    );
+        ));
   }
+  void toast(BuildContext context, String s) {}
 }

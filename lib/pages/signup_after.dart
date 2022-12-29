@@ -20,7 +20,28 @@ class _Signup_afterState extends State<Signup_after> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+           backgroundColor: Color(0xff1160aa),
+          elevation: 0,
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: Text(
+                  '회원가입 완료',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    height: 1.7,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    fontFamily: 'Nanum Barumpen',
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,7 +60,7 @@ class _Signup_afterState extends State<Signup_after> {
                 "회원가입이 완료되었습니다.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Colors.blue,
+                    color: Color(0xff1160aa),
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold),
               ),
@@ -63,7 +84,7 @@ class _Signup_afterState extends State<Signup_after> {
                   padding: const EdgeInsets.only(top: 12, bottom: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0),
-                    side: const BorderSide(color: Colors.blue),
+                    side: const BorderSide(color: Color(0xff1160aa)),
                   ),
                 ),
                 child: const Text(

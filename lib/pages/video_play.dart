@@ -3,6 +3,7 @@ import 'package:video_player/video_player.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VideoPlay extends StatefulWidget {
   const VideoPlay({
@@ -13,12 +14,38 @@ class VideoPlay extends StatefulWidget {
 }
 
 class _VideoPlayState extends State<VideoPlay> {
+  //------------------------------------------로그인 정보 가져오기---------------//
+  String userinfo = '';
+  // String userid = '';
+
+  
+  @override
+  void initState() {
+    loadVideoPlayer();
+    super.initState();
+    setData();
+  }
+
+  void setData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userinfo = prefs.getString('id')!;
+    });
+    
+    try {
+      setState(() {
+        final String? userinfo = prefs.getString('id');        
+      });
+    } catch (e) {}
+  }
+  //-----------------------------------------------------------------여기까지---------------------
+  
   //----------------------------------------
   Future<List<Video>> getSQLData() async {
     final List<Video> videoList = [];
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
-      String sqlQuery = 'select file_name from Video order by file_name DESC';
+      String sqlQuery = 'select file_name from Video where user_id="$userinfo" order by file_name DESC';
       await conn.query(sqlQuery).then((result) {
         for (var res in result) {
           final videoModel = Video(
@@ -40,12 +67,7 @@ class _VideoPlayState extends State<VideoPlay> {
 
   late VideoPlayerController controller;
 
-  @override
-  void initState() {
-    loadVideoPlayer();
-    super.initState();
-  }
-
+  
   loadVideoPlayer() {
     controller = VideoPlayerController.network(
         'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
@@ -153,24 +175,38 @@ class _VideoPlayState extends State<VideoPlay> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final data = snapshot.data as List;
-              return ListTile(
-                leading: Text(
-                  data[index].file_name.toString(),
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                //title: Text(
-                //  data[index].Datetime.toString(),
-                //  style: const TextStyle(
-                //    fontSize: 20,
-                //    fontWeight: FontWeight.bold,
-                //  ),
-                //),
-                //subtitle: Text(
-                //  data[index].Datetime.toString(),
-                //  style: const TextStyle(fontSize: 20),
-                //),
-              );
+              return Card(
+                  child: Container(
+                      child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Text(
+                      data[index].file_name.toString(),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              )));
+              //return ListTile(
+              //  leading: Text(
+              //    data[index].file_name.toString(),
+              //    style: const TextStyle(
+              //        fontSize: 20, fontWeight: FontWeight.bold),
+              //  ),
+
+              //title: Text(
+              //  data[index].Datetime.toString(),
+              //  style: const TextStyle(
+              //    fontSize: 20,
+              //    fontWeight: FontWeight.bold,
+              //  ),
+              //),
+              //subtitle: Text(
+              //  data[index].Datetime.toString(),
+              //  style: const TextStyle(fontSize: 20),
+              //),
+              //);
             },
           );
         });

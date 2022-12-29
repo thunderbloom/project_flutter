@@ -1,48 +1,90 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:get/get.dart';
 import 'package:project_flutter/controllers/global_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:project_flutter/main.dart';
+import 'package:project_flutter/pages/device_registration.dart';
 import 'package:project_flutter/pages/login_page.dart';
+import 'package:project_flutter/main.dart';
 import 'package:project_flutter/pages/mypage.dart';
+import 'package:project_flutter/pages/settings.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
 import 'package:project_flutter/pages/show_video_db.dart';
 import 'package:project_flutter/widgets/current_weather_widget.dart';
 import 'package:project_flutter/widgets/header_widget.dart';
 import 'package:project_flutter/pages/video_play.dart';
-
 import 'package:project_flutter/views/home_screen.dart';
-// import 'package:project_flutter/mqtt/mqtt_client_connect.dart';
-//import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project_flutter/widgets/discover_card.dart';
 import 'package:project_flutter/widgets/svg_asset.dart';
 import 'package:project_flutter/widgets/icons.dart';
 import 'package:badges/badges.dart';
 import 'package:project_flutter/pages/show_history_db.dart';
-import 'package:project_flutter/pages/mypage.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:project_flutter/pages/login_page.dart' as login;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:project_flutter/mqtt/mqtt_client_connect.dart' as mqtt;
+import 'package:mqtt_client/mqtt_client.dart';
+
+import '../mqtt/mqtt_client_connect.dart';
+
+// String userinfo = login.userinfo;
 
 class Loding extends StatefulWidget {
   const Loding({Key? key}) : super(key: key);
+
   @override
   _LodingState createState() => _LodingState();
 }
 
 class _LodingState extends State<Loding> {
+  //------------------------------------------로그인 정보 가져오기---------------//
+  String userinfo = '';
+  // String userid = '';
+
+  late MqttClient client;
   @override
-  //int _counter = 0;
-  //void _incrementCounter() {
-  //  setState(() {
-  //    _counter++;
-  //  });
-  //}
+  void initState() {
+    super.initState();
+    setData();
+  }
 
-  //bool showElevatedButtonBadge = true;
+  void setData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userinfo = prefs.getString('id')!;
+    });
+    // print('여기까진 잘 됨 $userinfo');
 
+    try {
+      setState(() {
+        final String? userinfo = prefs.getString('id');
+      });
+    } catch (e) {}
+  }
+  //-----------------------------------------------------------------여기까지---------------------
+  // loadCounter() async {
+  //   // SharedPreferences의 인스턴스를 필드에 저장
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   // late MqttClient client;
+  //   final String? userid = prefs.getString('id');
+  //   setState((){});
+
+  //   // setState(() {
+  //   //   // SharedPreferences에 counter로 저장된 값을 읽어 필드에 저장. 없을 경우 0으로 대입
+  //   //   final String? userid = (prefs.getString('id'));
+  //   // });
+  // print('여기까지 왔나 $userinfo');
+  //     String userid2 = '$userid';
+  //   //   return id;
+
+  //   // });
+  //   // String userid2 = '$userid';
+  // }
+
+  @override
   int _selectedIndex = 0;
   int pageIndex = 0;
   static const TextStyle optionStyle =
@@ -52,17 +94,35 @@ class _LodingState extends State<Loding> {
       Get.put(GlobalController(), permanent: true);
 
   final RxBool _isLoading = true.obs;
-
-  //static final List<GetPage> pages = [
-  //// ...
-  //  GetPage(
-  //    name: SearchScreen.name,
-  //    page: () => DrawerScreen(),
-  //    binding: SearchBarBinding(),
-  //  ),
-  //];
+//
+//  //Future<void> UserID() async {
+//  //  final prefs = await SharedPreferences.getInstance();
+//  //  String? userid = prefs.getString('id');
+//  //  print('userid:$userid');
+//  //}
+//
+//  // Future<void> UserID() async {
+//  //   final prefs = await SharedPreferences.getInstance();
+//  //   String? userid = jsonEncode(prefs.getString('id'));
+//  //   prefs.setString('id', userid);
+//  // }
+//
+//  //Future<void> _UserID() async {
+//  //  //final prefs = await SharedPreferences.getInstance();
+//  //  String? id = jsonDecode(prefs.getString('id'));
+//  //  return (userid);
+//  //}
 
   Widget build(BuildContext context) {
+    final logo = Hero(
+      tag: 'home',
+      child: Container(
+        // backgroundColor: Colors.white,
+        // radius: 100.0,
+        child: Image.asset('assets/images/winguardlogo.png'),
+      ),
+    );
+
     return GetMaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -104,8 +164,9 @@ class _LodingState extends State<Loding> {
                 //    backgroundImage: AssetImage('assets/weather/01d.png'),
                 //  ),
                 //],
-                accountName: Text('team3'),
-                accountEmail: Text('logenzes@gmail.com'),
+
+                accountName: Text("$userinfo 님"),
+                accountEmail: Text('환영합니다'),
                 onDetailsPressed: () {
                   print('arrow is clicked');
                 },
@@ -120,26 +181,18 @@ class _LodingState extends State<Loding> {
                     Icons.account_circle,
                     color: Colors.grey[850],
                   ),
-                  title: Text('회원정보 수정'),
+                  title: Text('회원정보'),
                   onTap: mypage
-                  //() {
-                  //  Navigator.push(context,
-                  //      MaterialPageRoute(builder: (context) => MyPage4()));
-                  //  //print('회원정보 수정 is clicked');
-                  //},
-                  //trailing: Icon(Icons.add),
                   ),
               ListTile(
-                leading: Icon(
-                  Icons.settings,
-                  color: Colors.grey[850],
-                ),
-                title: Text('환경설정'),
-                onTap: () {
-                  print('환경설정 is clicked');
-                },
-                //trailing: Icon(Icons.add),
-              ),
+                  leading: Icon(
+                    Icons.settings,
+                    color: Colors.grey[850],
+                  ),
+                  title: Text('환경설정'),
+                  onTap: settingpage
+                  //trailing: Icon(Icons.add),
+                  ),
               ListTile(
                 leading: Icon(
                   Icons.support_agent,
@@ -167,15 +220,28 @@ class _LodingState extends State<Loding> {
               ),
               Divider(),
               ListTile(
-                  leading: Icon(
-                    Icons.logout_rounded, //question_answer,
-                    color: Colors.grey[850],
-                  ),
-                  title: Text('로그아웃'),
-                  onTap: () {
-                    print('로그아웃 is clicked');
-                  }
-                  //() async{
+                leading: Icon(
+                  Icons.logout_rounded, //question_answer,
+                  color: Colors.grey[850],
+                ),
+                title: Text('로그아웃'),
+                onTap: () async {
+                  // print('로그아웃 is clicked');
+                  final prefs = await SharedPreferences.getInstance();
+                  //  prefs.setBool('isLoggedIn', false);
+                  //  client.disconnect();
+                  prefs.remove('id');
+                  prefs.setBool('isLoggedIn', false);
+                  // prefs.remove('password');
+                  print('로그아웃');
+                  //  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      (route) => false);
+                  // });
+                  // 로그아웃}
+                  // () async{
                   //  final prefs = await SharedPreferences.getInstance();
                   //  prefs.setBool('isLoggedIn', false);
                   //  Navigator.push(
@@ -183,14 +249,13 @@ class _LodingState extends State<Loding> {
                   //      MaterialPageRoute(
                   //          builder: (context) => LoginPage())); // 로그아웃
                   //  //print('로그아웃 is clicked');
-                  //},
-                  //trailing: Icon(Icons.add),
-                  ),
+                },
+                // trailing: Icon(Icons.add),
+              ),
             ],
           ),
         ),
         backgroundColor: Colors.white,
-
         body: SafeArea(
           child: Obx(
             () => globalController.checkLoading().isTrue
@@ -206,17 +271,7 @@ class _LodingState extends State<Loding> {
                         physics: BouncingScrollPhysics(),
                         //--------------
                         children: <Widget>[
-                          Text(
-                              textAlign: TextAlign.center,
-                              '우리집 수호천사',
-                              style: TextStyle(
-                                  color: Color(0xff1160aa),
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          //-------------------
+                          logo,
                           const HeaderWidget(),
                           InkWell(
                             onTap: () {
@@ -253,7 +308,7 @@ class _LodingState extends State<Loding> {
                               children: [
                                 SizedBox(width: 15),
                                 DiscoverCard(
-                                  // tag: "sensor",
+                                  tag: "sensor",
                                   onTap: sensor,
                                   title: "알림내역",
                                   subtitle: "정보를 확인하세요!",
@@ -269,13 +324,14 @@ class _LodingState extends State<Loding> {
                                 ),
                                 SizedBox(width: 22),
                                 DiscoverCard(
+                                  tag: "cctv",
                                   onTap: cctv,
                                   title: "CCTV",
                                   subtitle: "녹화영상 확인",
                                   gradientStartColor: Color(0xffFC67A7),
                                   gradientEndColor: Color(0xffF6815B),
                                   icons: SvgAsset(
-                                    assetName: AssetName.sensor,
+                                    assetName: AssetName.headphone,
                                     height: 50,
                                     width: 50,
                                   ),
@@ -286,13 +342,14 @@ class _LodingState extends State<Loding> {
                                 ),
                                 SizedBox(width: 22),
                                 DiscoverCard(
+                                  tag: "register",
                                   onTap: adddevice1,
                                   title: "기기등록",
                                   subtitle: "+",
                                   gradientStartColor: Color(0xff441DFC),
                                   gradientEndColor: Color(0xffF6815B),
                                   icons: SvgAsset(
-                                    assetName: AssetName.sensor,
+                                    assetName: AssetName.headphone,
                                     height: 24,
                                     width: 24,
                                   ),
@@ -301,23 +358,23 @@ class _LodingState extends State<Loding> {
                                   children: [],
                                   //--------------------------------
                                 ),
-                                SizedBox(width: 22),
-                                DiscoverCard(
-                                  onTap: adddevice2,
-                                  title: "기기등록",
-                                  subtitle: "+",
-                                  gradientStartColor: Color(0xff13DEA0),
-                                  gradientEndColor: Color(0xffF0B31A),
-                                  icons: SvgAsset(
-                                    assetName: AssetName.sensor,
-                                    height: 24,
-                                    width: 24,
-                                  ),
-                                  //--------------------------------
-                                  icon: SvgAsset(),
-                                  children: [],
-                                  //--------------------------------
-                                ),
+                                // SizedBox(width: 22),
+                                // DiscoverCard(
+                                //   onTap: adddevice2,
+                                //   title: "기기등록",
+                                //   subtitle: "+",
+                                //   gradientStartColor: Color(0xff13DEA0),
+                                //   gradientEndColor: Color(0xffF0B31A),
+                                //   icons: SvgAsset(
+                                //     assetName: AssetName.sensor,
+                                //     height: 24,
+                                //     width: 24,
+                                //   ),
+                                //   //--------------------------------
+                                //   icon: SvgAsset(),
+                                //   children: [],
+                                //   //--------------------------------
+                                // ),
                               ],
                             ),
                           ),
@@ -339,7 +396,11 @@ class _LodingState extends State<Loding> {
   }
 
   void adddevice1() {
-    Get.to(() => VideoData(), transition: Transition.rightToLeft);
+    Get.to(
+        () => Device_re(
+              title: 'device_re',
+            ),
+        transition: Transition.rightToLeft);
   }
 
   void adddevice2() {
@@ -347,6 +408,10 @@ class _LodingState extends State<Loding> {
   }
 
   void mypage() {
-    Get.to(() => MyPage4(), transition: Transition.rightToLeft);
+    Get.to(() => MyPage(), transition: Transition.rightToLeft);
+  }
+
+  void settingpage() {
+    Get.to(() => Setting(), transition: Transition.rightToLeft);
   }
 }

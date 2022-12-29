@@ -24,12 +24,11 @@ class UserProfiles {
   String? password;
   String? name;
 
-
-  UserProfiles(
-      {this.user_id,
-      this.password,
-      this.name,
-    });
+  UserProfiles({
+    this.user_id,
+    this.password,
+    this.name,
+  });
 }
 
 class Devices {
