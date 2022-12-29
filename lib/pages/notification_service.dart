@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 /// Step 2. Create a NotificationService class
 
 class NotificationService {
@@ -8,7 +9,8 @@ class NotificationService {
   // 2.Use the factory keyword when implementing a constructor
   // that does not create a new instance of its class.
   NotificationService._internal();
-  static final NotificationService _notificationService = NotificationService._internal();
+  static final NotificationService _notificationService =
+      NotificationService._internal();
   factory NotificationService() {
     return _notificationService;
   }
@@ -18,31 +20,32 @@ class NotificationService {
     // Specifies the default icon for notifications.
     // icon path: PROJECT_NAME\android\app\src\main\res\drawable\icon.png
     const AndroidInitializationSettings androidInitializationSettings =
-      AndroidInitializationSettings("icon");
+        AndroidInitializationSettings("icon");
     const InitializationSettings initializationSettings =
-      InitializationSettings(android: androidInitializationSettings);
+        InitializationSettings(android: androidInitializationSettings);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   // Some configurations for platform-specific notification's details.
   static const AndroidNotificationDetails _androidNotificationDetails =
-    AndroidNotificationDetails(
-      'ChannelId',
-      'ChannelName',
-      channelDescription: "Responsible for all local notifications",
-      playSound: true,
-      priority: Priority.high,
-      importance: Importance.high,
-    );
+      AndroidNotificationDetails(
+    'ChannelId',
+    'ChannelName',
+    channelDescription: "Responsible for all local notifications",
+    playSound: true,
+    priority: Priority.high,
+    importance: Importance.high,
+  );
   final NotificationDetails notificationDetails =
-    const NotificationDetails(android: _androidNotificationDetails);
+      const NotificationDetails(android: _androidNotificationDetails);
 
   // Now we need to call the show() method of FlutterLocalNotificationsPlugin.
   // Show() is responsible for showing the local notification.
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   Future<void> showNotification(int id, String title, String body) async {
-    await flutterLocalNotificationsPlugin.show(id, title, body, notificationDetails);
+    await flutterLocalNotificationsPlugin.show(
+        id, title, body, notificationDetails);
   }
 }

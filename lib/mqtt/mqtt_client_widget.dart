@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:project_flutter/mqtt/mqtt_client_connect.dart';
-import 'package:project_flutter/mqtt/mqtt_client_connect.dart';
+//import 'package:project_flutter/mqtt/mqtt_client_connect.dart';
 
 class MyMqttPage extends StatefulWidget {
   const MyMqttPage({Key? key, required this.title}) : super(key: key);
@@ -9,6 +9,7 @@ class MyMqttPage extends StatefulWidget {
   @override
   _MyMqttPageState createState() => _MyMqttPageState();
 }
+
 class _MyMqttPageState extends State<MyMqttPage> {
   late MqttClient client;
   var topic = "house/door";
@@ -29,25 +30,25 @@ class _MyMqttPageState extends State<MyMqttPage> {
   //   final builder = MqttClientPayloadBuilder();
   //   builder.addString('Hello from flutter_client');
   //   client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
-  // } 
+  // }
 
   // void _publishBmi(String message) {
   //   final builder = MqttClientPayloadBuilder();
   //   var height = double.parse(_heightController.text.trim());
   //   var weight = double.parse(_weightController.text.trim());
-  //   var bmi = weight / ((height / 100) * (height / 100)); 
+  //   var bmi = weight / ((height / 100) * (height / 100));
   //   var data = "{\"height\": $height, \"weight\": $weight, \"bmi\": $bmi}";
-  //   builder.addString(data); 
+  //   builder.addString(data);
   //   // builder.addString('height : $height weight: $weight bmi: $bmi');
   //   client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
-  // } 
+  // }
 
   void _publish(String message) {
     final builder = MqttClientPayloadBuilder();
     // builder.addString('Hello from flutter_client');
     builder.addString(message);
     client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
-  }   
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +72,12 @@ class _MyMqttPageState extends State<MyMqttPage> {
               child: Text('Subscribe'),
               onPressed: () {
                 client.subscribe(topic, MqttQos.atLeastOnce);
-              },              
+              },
             ),
             ElevatedButton(
               child: const Text('Publish'),
               onPressed: () => {_publish('light_on')},
-            ),            
+            ),
             ElevatedButton(
               child: const Text('Unsubscribe'),
               onPressed: () => {client.unsubscribe(topic)},
@@ -129,7 +130,7 @@ class _MyMqttPageState extends State<MyMqttPage> {
             //             if (_formKey.currentState!.validate()) {   //  폼에 키를 부여하고 준 validator를 한꺼번에 검증
             //               var heightTrim = double.parse(_heightController.text.trim());
             //               var weightTrim = double.parse(_weightController.text.trim());
-            //               var bmi = weightTrim / ((heightTrim / 100) * (heightTrim / 100));                          
+            //               var bmi = weightTrim / ((heightTrim / 100) * (heightTrim / 100));
             //               _publish(
             //                 "{\"height\": $heightTrim, \"weight\": $weightTrim, \"bmi\": $bmi}"
             //               );
@@ -154,7 +155,7 @@ class _MyMqttPageState extends State<MyMqttPage> {
         ),
       ),
     );
-  }  
+  }
 }
 
 // class BmiResult extends StatelessWidget {

@@ -90,24 +90,13 @@ class _Device_regis extends State<Device_re> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Color(0xff1160aa),
-          elevation: 0,
-          title: Column(
-            children: <Widget>[
-              Center(
-                child: Text(
-                  '기기등록',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    //height: 1.7,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    //fontStyle: FontStyle.normal,
-                  ),
-                ),
-              )
-            ],
+          title: Text(
+            '기기등록',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
           ),
+          centerTitle: true, // 중앙 정렬
+          elevation: 0.0,
+          backgroundColor: Color(0xff1160aa),
         ),
         resizeToAvoidBottomInset: true,
         body: SafeArea(

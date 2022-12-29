@@ -40,8 +40,12 @@ class _HistoryDataState extends State<HistoryData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("알림내역",),
-      backgroundColor: Color(0xff1160aa),),
+      appBar: AppBar(
+        title: Text(
+          "알림내역",
+        ),
+        backgroundColor: Color(0xff1160aa),
+      ),
       body: Center(
         child: getDBData(),
       ),
@@ -61,24 +65,71 @@ class _HistoryDataState extends State<HistoryData> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final data = snapshot.data as List;
-              return ListTile(
-                leading: Text(
-                  data[index].sensor.toString(),
-                  style: const TextStyle(fontSize: 20),
-                ),
-                title: Text(
-                  data[index].status.toString(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+              return Card(
+                  child: Container(
+                      child: Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text(
+                      data[index].status.toString(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      data[index].datetime.toString(),
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    leading: Text(
+                      data[index].sensor.toString(),
+                      style: const TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-                subtitle: Text(
-                  data[index].datetime.toString(),
-                  style: const TextStyle(fontSize: 20),
-                ),
-                
-              );
+                ],
+              )));
+              // return Padding(
+              //     padding:
+              //         const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: <Widget>[
+              //         ListTile(
+              //           title: Text(
+              //             data[index].status.toString(),
+              //             style: const TextStyle(
+              //               fontSize: 20,
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //           ),
+              //           subtitle: Text(
+              //             data[index].datetime.toString(),
+              //             style: const TextStyle(fontSize: 20),
+              //           ),
+              //           leading: Text(
+              //             data[index].sensor.toString(),
+              //             style: const TextStyle(fontSize: 20),
+              //           ),
+              //         ),
+              //       ],
+              //     ));
+              // return ListTile(
+              //   leading: Text(
+              //     data[index].sensor.toString(),
+              //     style: const TextStyle(fontSize: 20),
+              //   ),
+              //   title: Text(
+              //     data[index].status.toString(),
+              //     style: const TextStyle(
+              //       fontSize: 20,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              //   subtitle: Text(
+              //     data[index].datetime.toString(),
+              //     style: const TextStyle(fontSize: 20),
+              //   ),
+              // );
             },
           );
         });
