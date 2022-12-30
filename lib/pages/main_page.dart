@@ -11,6 +11,7 @@ import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/main.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/pages/mypage.dart';
+import 'package:project_flutter/pages/settings.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
 import 'package:project_flutter/pages/show_video_db.dart';
 import 'package:project_flutter/widgets/current_weather_widget.dart';
@@ -30,11 +31,12 @@ import 'package:project_flutter/pages/mypage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_flutter/mqtt/mqtt_client_connect.dart' as mqtt;
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:project_flutter/pages/setting.dart';
+import 'package:project_flutter/pages/settings.dart';
 
 import '../mqtt/mqtt_client_connect.dart';
 // String userinfo = login.userinfo;
 
+// String userinfo = login.userinfo;
 
 class Loding extends StatefulWidget {
   const Loding({Key? key}) : super(key: key);
@@ -69,7 +71,7 @@ class _LodingState extends State<Loding> {
 
     try {
       setState(() {
-        final String? userinfo = prefs.getString('id');        
+        final String? userinfo = prefs.getString('id');
       });
     } catch (e) {}
   }
@@ -175,8 +177,7 @@ class _LodingState extends State<Loding> {
                 //],
 
                 accountName: Text("$userinfo 님"),
-                accountEmail: Text('환영합니다!!'),
-                // accountEmail: Text('logenzes@gmail.com'),
+                accountEmail: Text('환영합니다'),
                 onDetailsPressed: () {
                   print('arrow is clicked');
                 },
@@ -427,7 +428,8 @@ class _LodingState extends State<Loding> {
   void mypage() {
     Get.to(() => MyPage4(), transition: Transition.rightToLeft);
   }
-   void settingpage() {
+
+  void settingpage() {
     Get.to(() => Setting(), transition: Transition.rightToLeft);
   }
 }
