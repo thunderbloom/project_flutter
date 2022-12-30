@@ -1,9 +1,12 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:crypto/src/sha256.dart' as sha;
+
 import 'package:flutter/material.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:project_flutter/pages/login_page.dart';
+import 'package:project_flutter/pages/show_user_db.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../pages/show_user_db.dart';
 
 class EditMyPage extends StatefulWidget {
   const EditMyPage({Key? key}) : super(key: key);
@@ -27,35 +30,40 @@ class _EditMyPage extends State<EditMyPage> {
     setState(() {
       userinfo = prefs.getString('id')!;
     });
-    // print('여기까진 잘 됨 $userinfo');
 
     try {
       setState(() {
         final String? userinfo = prefs.getString('id');
-        print('여기까진 잘 됨 $userinfo');
+        print('확인 $userinfo');
       });
     } catch (e) {}
   }
 
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController emailController = TextEditingController();        
 
+  Digest encrypt() {
+    var bytes = utf8.encode(passwordController.text);
+    Digest sha256Result = sha.sha256.convert(bytes);
+    return sha256Result;
+  }
   void updateData() async {
+    Digest encrpytedPassword = encrypt();
     db.getConnection().then((conn) {
       String sqlQuery =
-          'update User set name=?, phone_number=?, address=?, email=? where user_id=?';
+          'update User set password=?, phone_number=?, address=?, email=? where user_id=?';
       conn.query(sqlQuery, [
-        nameController.text,
+        encrpytedPassword.toString(),
         phoneController.text,
         addressController.text,
         emailController.text,
         userinfo
       ]);
       setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("수정 완료."),
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("정보를 수정했습니다."),
           duration: Duration(milliseconds: 700),
         ));
       });
@@ -65,9 +73,7 @@ class _EditMyPage extends State<EditMyPage> {
   @override
   void dispose() {
     super.dispose();
-    //useridController.dispose();
-    //userinfo.dispose();
-    nameController.dispose();
+    passwordController.dispose();
     phoneController.dispose();
     addressController.dispose();
     emailController.dispose();
@@ -76,20 +82,24 @@ class _EditMyPage extends State<EditMyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text(
-            '회원 정보 수정',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
+// AppBar
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: const Color(0xff1160aa),
+        centerTitle: true, // 중앙 정렬                 
+        title: const Text(
+          '회원정보 수정', style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 25,            
           ),
-          centerTitle: true, // 중앙 정렬
-          elevation: 0.0,
-          backgroundColor: Color(0xff1160aa),
         ),
-        resizeToAvoidBottomInset: true,
+      ),
+// Body        
       body: SafeArea(
-          child: SingleChildScrollView(
-              child: Padding(
+        child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Form(
               key: _formKey,
@@ -100,23 +110,27 @@ class _EditMyPage extends State<EditMyPage> {
                     height: 10.0,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 4),
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
                     child: TextFormField(
-                        controller: nameController,
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(32.0)),
-                          hintText: '이름',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '다시 입력해주세요';
-                          }
-                          return null;
-                        }),
+                      controller: passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      obscuringCharacter: "*",
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                        hintText: '비밀번호',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '다시 입력해주세요';
+                        } else if(value.length < 8) {
+                          return '글자수가 너무 적습니다. 8자리 이상 입력하세요.';
+                        }
+                        return null;
+                      }
+                    ),
                   ),
                   SizedBox(
                     height: 10.0,
@@ -124,87 +138,116 @@ class _EditMyPage extends State<EditMyPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 8, bottom: 4),
                     child: TextFormField(
-                        controller: phoneController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(32.0)),
-                          hintText: '전화번호',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '다시 입력해주세요';
-                          }
-                          return null;
-                        }),
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      obscuringCharacter: "*",                      
+                      decoration: InputDecoration(
+                        hintText: '비밀번호 확인',
+                        contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '다시 입력해주세요';
+                        } else if (value.length < 8) {
+                          return '글자수가 너무 적습니다. 8자리 이상 입력하세요.';
+                        } else if (value != passwordController.text) {
+                          return '비밀번호가 일치하지 않습니다.';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 4),
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
                     child: TextFormField(
-                        controller: addressController,
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(32.0)),
-                          hintText: '주소',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '다시 입력해주세요';
-                          }
-                          return null;
-                        }),
+                      controller: phoneController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                        hintText: '전화번호',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '다시 입력해주세요';
+                        }
+                        return null;
+                      }
+                    ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 4),
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
                     child: TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(32.0)),
-                          hintText: '이메일',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '다시 입력해주세요';
-                          }
-                          return null;
-                        }),
+                      controller: addressController,
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                        hintText: '주소',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '다시 입력해주세요';
+                        }
+                        return null;
+                      }
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
+                    child: TextFormField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)),
+                        hintText: '이메일',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '다시 입력해주세요';
+                        } else if(!value.contains("@") || !value.contains(".")) {
+                          return "유효한 이메일을 입력해주세요";
+                        }
+                        return null;
+                      }
+                    ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
                   ElevatedButton(
-                    child: Text('수정'),
+                    child: Text('저장'),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        toast(context, "기기등록 완료!");
+                        toast(context, "수정 완료!");
                         updateData();
                         print(userinfo);
-                        // print(userinfo);
-                        //Navigator.push(context,
-                        //    MaterialPageRoute(builder: (context) => Loding()));
+                        Navigator.pop(context);
                       }
                     },
                   ),
                 ],
               ),
             ),
-          )),
-        ));
+          )
+        ),
+      )
+    );
   }
 
   void toast(BuildContext context, String s) {}

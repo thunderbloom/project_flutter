@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:project_flutter/pages/device_registration.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/main.dart';
-import 'package:project_flutter/pages/mypage.dart';
+import 'package:project_flutter/pages/show_user_db.dart';
 import 'package:project_flutter/pages/settings.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
 import 'package:project_flutter/pages/show_video_db.dart';
@@ -404,11 +404,11 @@ class _LodingState extends State<Loding> {
   }
 
   void adddevice2() {
-    Get.to(() => DeviceData(), transition: Transition.rightToLeft);
+    Get.to(() => const DeviceData(), transition: Transition.rightToLeft);
   }
 
   void mypage() {
-    Get.to(() => MyPage(), transition: Transition.rightToLeft);
+    Get.to(() => const UserData(), transition: Transition.rightToLeft);
   }
 
   void settingpage() {

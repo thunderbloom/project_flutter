@@ -1,25 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/edit_mypage.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserData extends StatefulWidget {
-  const UserData({
-    Key? key,
-  }) : super(key: key);
+  const UserData({Key? key}) : super(key: key);
 
   @override
   State<UserData> createState() => _UserDataState();
 }
 
 class _UserDataState extends State<UserData> {
-  
     String userinfo = '';
-  // String userid = '';
-
   
   @override
   void initState() {
@@ -45,11 +39,12 @@ class _UserDataState extends State<UserData> {
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
       String sqlQuery =
-          'select user_id, phone_number, address, email from User where user_id = "$userinfo"';
+          'select user_id, name, phone_number, address, email from User where user_id = "$userinfo"';
       await conn.query(sqlQuery).then((result) {
         for (var res in result) {
           final profileModel = Profiles(
               user_id: res["user_id"],
+              name: res['name'],
               phonenumber: res["phone_number"],
               address: res["address"],
               email: res["email"]);
@@ -63,28 +58,22 @@ class _UserDataState extends State<UserData> {
     });
     return profileList;
   }
-   //String? a=data[index].name.toString();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: getDBData(),
-      // SafeArea(
-      //   //mainAxisAlignment: MainAxisAlignment.center,
-      //   child: Padding(padding:EdgeInsets.symmetric(),
-      //   child:Column(mainAxisAlignment: MainAxisAlignment.center,
-      //   children: <Widget>[
-      //     getDBData(),//SizedBox(child: getDBData(),), //getDBData(),
-      //   SizedBox(height: 15,),
-      //   SizedBox(child: CupertinoButton(child: Text('회원정보'), onPressed: (){}),)
-      //   ],),//children:[
-      //   // Container(child: getDBData(),), //getDBData(),
-      //   // SizedBox(height: 15,),
-      //   // SizedBox(child: CupertinoButton(child: Text('회원정보'), onPressed: (){}),)
-      //   //]
-      //   )//getDBData(),
-      
-      // ),
+    return Scaffold(     
+      appBar: AppBar(
+        centerTitle: true, // 중앙 정렬  
+        elevation: 0.0,
+        backgroundColor: Color(0xff1160aa),
+        title: const Text(
+          '회원정보', style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 25,           
+          ),
+        ),
+      ),
+      body: getDBData(),
     );
   }
 
@@ -114,6 +103,11 @@ class _UserDataState extends State<UserData> {
                       leading: Icon(Icons.people),
                     ),
                     ListTile(
+                      title: Text('이름'),
+                      subtitle: Text(data[index].name.toString()),
+                      leading: Icon(Icons.person),
+                    ),
+                    ListTile(
                       title: Text('전화번호'),
                       subtitle: Text(data[index].phonenumber.toString()),
                       leading: Icon(Icons.phone),
@@ -127,16 +121,19 @@ class _UserDataState extends State<UserData> {
                       title: Text('이메일'),
                       subtitle: Text(data[index].email.toString()),
                       leading: Icon(Icons.email),
-                    ),    
+                    ),
                     Divider(),
-                    SizedBox(height: 285),
-                    SizedBox(child:CupertinoButton(child: Text('회원정보'), onPressed: () {
-                      Navigator.push(
-                        context, MaterialPageRoute(
-                          builder: (context) => const EditMyPage()
-                        )
-                      );
-                    }),)
+                    SizedBox(height: 215),
+                    SizedBox(child:CupertinoButton(
+                      child: Text('회원정보 수정'), onPressed: () {
+                        Navigator.push(
+                          context, MaterialPageRoute(
+                            builder: (context) => const EditMyPage()))
+                            .then((value) {
+                              setState(() {});
+                            });
+                      }
+                    )),
                   ],
                 )
               )
