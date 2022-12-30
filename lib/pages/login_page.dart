@@ -15,9 +15,9 @@ import 'package:crypto/src/sha256.dart' as sha;
 import 'package:project_flutter/pages/main_page.dart';
 import 'package:project_flutter/pages/sign_up.dart';
 import 'package:project_flutter/views/home_screen.dart';
-import 'package:mqtt_client/mqtt_client.dart';
+// import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:project_flutter/mqtt/mqtt_client_connect.dart';
+// import 'package:project_flutter/mqtt/mqtt_client_connect.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_flutter/pages/notification_service.dart';
 
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
   //SharedPreferences _prefs;
 
   final db = Mysql();
-  late MqttClient client;
+  // late MqttClient client;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController idController = TextEditingController();
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<List<Profiles>> getSQLData() async {
     final List<Profiles> profileList = [];
     final Mysql db = Mysql();
-    late MqttClient client;
+    // late MqttClient client;
     final prefs = await SharedPreferences.getInstance();
     // await connect().then((value) {
     //                   client = value;
@@ -142,10 +142,11 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) => Loding()));
 
-            connect().then((value) {
-              // ------------------------MQTT 연결
-              client = value;
-            });
+            // connect().then((value) {
+            //   // ------------------------MQTT 연결
+            //   client = value;
+             
+            // });
             print(userinfo);
             // print("접속된 유저 id : $userid");
             // client.subscribe('$userid', MqttQos.atLeastOnce);

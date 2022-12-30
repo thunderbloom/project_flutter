@@ -30,7 +30,9 @@ import 'package:project_flutter/pages/mypage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_flutter/mqtt/mqtt_client_connect.dart' as mqtt;
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:project_flutter/pages/setting.dart';
 
+import '../mqtt/mqtt_client_connect.dart';
 // String userinfo = login.userinfo;
 
 
@@ -55,6 +57,11 @@ class _LodingState extends State<Loding> {
 
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    late MqttClient client;
+    connect().then((value) {
+              // ------------------------MQTT 연결
+              client = value;
+              });
     setState(() {
       userinfo = prefs.getString('id')!;
     });
@@ -199,9 +206,8 @@ class _LodingState extends State<Loding> {
                   color: Colors.grey[850],
                 ),
                 title: Text('환경설정'),
-                onTap: () {
-                  print('환경설정 is clicked');
-                },
+                onTap: settingpage
+                
                 //trailing: Icon(Icons.add),
               ),
               ListTile(
@@ -420,5 +426,8 @@ class _LodingState extends State<Loding> {
 
   void mypage() {
     Get.to(() => MyPage4(), transition: Transition.rightToLeft);
+  }
+   void settingpage() {
+    Get.to(() => Setting(), transition: Transition.rightToLeft);
   }
 }

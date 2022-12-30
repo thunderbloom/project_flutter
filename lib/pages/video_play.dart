@@ -180,6 +180,7 @@ class _VideoPlayState extends State<VideoPlay> {
                   data[index].file_name.toString(),
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
+                  
                 ),
                 //title: Text(
                 //  data[index].Datetime.toString(),
