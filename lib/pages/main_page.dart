@@ -28,6 +28,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_flutter/mqtt/mqtt_client_connect.dart' as mqtt;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:project_flutter/pages/settings.dart';
+import 'package:app_settings/app_settings.dart';
 
 import '../mqtt/mqtt_client_connect.dart';
 // String userinfo = login.userinfo;
@@ -48,7 +49,7 @@ class _LodingState extends State<Loding> {
 
   late MqttClient client;
   @override
-  void initState() {
+  void initState() {    
     super.initState();
     setData();
   }
@@ -207,7 +208,7 @@ class _LodingState extends State<Loding> {
                   color: Colors.grey[850],
                 ),
                 title: Text('고객센터'),
-                onTap: () {
+                onTap: () {                  
                   print('고객센터 is clicked');
                 },
                 //trailing: Icon(Icons.add),
@@ -402,6 +403,9 @@ class _LodingState extends State<Loding> {
   void cctv() {
     Get.to(() => VideoPlay(), transition: Transition.rightToLeft);
   }
+  // void cctv2() {
+  //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
+  // }
 
   void adddevice1() {
     Get.to(
@@ -422,4 +426,5 @@ class _LodingState extends State<Loding> {
   void settingpage() {
     Get.to(() => Setting(), transition: Transition.rightToLeft);
   }
+  
 }
