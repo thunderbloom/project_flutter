@@ -70,7 +70,8 @@ class _VideoPlayState extends State<VideoPlay> {
   
   loadVideoPlayer() {
     controller = VideoPlayerController.network(
-        'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
+      'http://192.168.41.191:5000');
+        // 'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
     // 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
     controller.addListener(() {
       setState(() {});

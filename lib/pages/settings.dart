@@ -142,10 +142,10 @@ class SettingPage extends State<Setting> {
         connect().then((value) {
           client = value;
         });
-        print('알림 켜짐');
+        print('연결');
       } else {
         client?.disconnect();
-        print('알림 꺼짐');
+        print('연결 해제');
       }
     });
   }
