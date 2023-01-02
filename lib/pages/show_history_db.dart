@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryData extends StatefulWidget {
   const HistoryData({
@@ -13,12 +14,40 @@ class HistoryData extends StatefulWidget {
 }
 
 class _HistoryDataState extends State<HistoryData> {
+
+  //------------------------------------------로그인 정보 가져오기---------------//
+  String userinfo = '';
+  // String userid = '';
+
+  
+  @override
+  void initState() {
+    super.initState();
+    setData();
+  }
+
+  void setData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userinfo = prefs.getString('id')!;
+    });
+   
+    try {
+      setState(() {
+        final String? userinfo = prefs.getString('id');        
+      });
+    } catch (e) {}
+  }
+  //-----------------------------------------------------------------여기까지---------------------
+
+
+
   Future<List<History>> getSQLData() async {
     final List<History> historyList = [];
     final Mysql db = Mysql();
     await db.getConnection().then((conn) async {
       String sqlQuery =
-          'select sensor, status, datetime from History where user_id="test9999" order by datetime DESC';
+          'select sensor, status, datetime from History where user_id="$userinfo" order by datetime DESC';
       await conn.query(sqlQuery).then((result) {
         for (var res in result) {
           final historyModel = History(

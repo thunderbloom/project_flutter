@@ -15,6 +15,7 @@ Future<void> main() async {
   await NotificationService().init(); //
   final prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  // final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
   // runApp(MyApp());
   runApp(MyApp(isLoggedIn: isLoggedIn));
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        // home: isLoggedIn ? const LoginPage() : const Loding(),
-        home: const LoginPage());
+        home: isLoggedIn ? const Loding() : const LoginPage(),);
+        // home: const LoginPage());
   }
 }

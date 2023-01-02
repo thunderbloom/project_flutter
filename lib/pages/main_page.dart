@@ -9,8 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:project_flutter/pages/device_registration.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/main.dart';
-import 'package:project_flutter/pages/login_page.dart';
-import 'package:project_flutter/pages/mypage.dart';
+import 'package:project_flutter/pages/show_user_db.dart';
 import 'package:project_flutter/pages/settings.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
 import 'package:project_flutter/pages/show_video_db.dart';
@@ -18,7 +17,6 @@ import 'package:project_flutter/widgets/current_weather_widget.dart';
 import 'package:project_flutter/widgets/header_widget.dart';
 import 'package:project_flutter/pages/video_play.dart';
 import 'package:project_flutter/views/home_screen.dart';
-import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project_flutter/widgets/discover_card.dart';
 import 'package:project_flutter/widgets/svg_asset.dart';
@@ -27,16 +25,15 @@ import 'package:badges/badges.dart';
 import 'package:project_flutter/pages/show_history_db.dart';
 import 'package:project_flutter/pages/login_page.dart' as login;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:project_flutter/pages/mypage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_flutter/mqtt/mqtt_client_connect.dart' as mqtt;
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:project_flutter/pages/settings.dart';
+import 'package:app_settings/app_settings.dart';
 
 import '../mqtt/mqtt_client_connect.dart';
-
 // String userinfo = login.userinfo;
 
-//String userinfo = '';
+// String userinfo = login.userinfo;
 
 class Loding extends StatefulWidget {
   const Loding({Key? key}) : super(key: key);
@@ -46,6 +43,7 @@ class Loding extends StatefulWidget {
 }
 
 class _LodingState extends State<Loding> {
+  //------------------------------------------로그인 정보 가져오기---------------//
   String userinfo = '';
   // String userid = '';
 
@@ -58,6 +56,11 @@ class _LodingState extends State<Loding> {
 
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    late MqttClient client;
+    connect().then((value) {
+      // ------------------------MQTT 연결
+      client = value;
+    });
     setState(() {
       userinfo = prefs.getString('id')!;
     });
@@ -66,10 +69,10 @@ class _LodingState extends State<Loding> {
     try {
       setState(() {
         final String? userinfo = prefs.getString('id');
-        print('여기까진 잘 됨 $userinfo');
       });
     } catch (e) {}
   }
+  //-----------------------------------------------------------------여기까지---------------------
   // loadCounter() async {
   //   // SharedPreferences의 인스턴스를 필드에 저장
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -186,13 +189,16 @@ class _LodingState extends State<Loding> {
                     Icons.account_circle,
                     color: Colors.grey[850],
                   ),
-                  title: Text('회원정보 수정'),
-                  onTap: mypage
-                  //() {
-                  //  Navigator.push(context,
-                  //      MaterialPageRoute(builder: (context) => MyPage4()));
-                  //  //print('회원정보 수정 is clicked');
-                  //},
+                  title: Text('회원정보'),
+                  onTap: mypage),
+              ListTile(
+                  leading: Icon(
+                    Icons.settings,
+                    color: Colors.grey[850],
+                  ),
+                  title: Text('환경설정'),
+                  onTap: settingpage
+
                   //trailing: Icon(Icons.add),
                   ),
               ListTile(
@@ -200,8 +206,10 @@ class _LodingState extends State<Loding> {
                   Icons.settings,
                   color: Colors.grey[850],
                 ),
-                title: Text('환경설정'),
-                onTap: settingpage,
+                title: Text('고객센터'),
+                onTap: () {
+                  print('고객센터 is clicked');
+                },
                 //trailing: Icon(Icons.add),
               ),
               ListTile(
@@ -238,10 +246,12 @@ class _LodingState extends State<Loding> {
                 title: Text('로그아웃'),
                 onTap: () async {
                   // print('로그아웃 is clicked');
-                  // final prefs = await SharedPreferences.getInstance();
+                  final prefs = await SharedPreferences.getInstance();
                   //  prefs.setBool('isLoggedIn', false);
                   //  client.disconnect();
-                  //  prefs.remove('id');
+                  prefs.remove('id');
+                  prefs.setBool('isLoggedIn', false);
+                  // prefs.remove('password');
                   print('로그아웃');
                   //  WidgetsBinding.instance.addPostFrameCallback((_) async {
                   Navigator.pushAndRemoveUntil(
@@ -403,6 +413,9 @@ class _LodingState extends State<Loding> {
   void cctv() {
     Get.to(() => VideoPlay(), transition: Transition.rightToLeft);
   }
+  // void cctv2() {
+  //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
+  // }
 
   void adddevice1() {
     Get.to(
@@ -413,11 +426,11 @@ class _LodingState extends State<Loding> {
   }
 
   void adddevice2() {
-    Get.to(() => DeviceData(), transition: Transition.rightToLeft);
+    Get.to(() => const DeviceData(), transition: Transition.rightToLeft);
   }
 
   void mypage() {
-    Get.to(() => MyPage4(), transition: Transition.rightToLeft);
+    Get.to(() => const UserData(), transition: Transition.rightToLeft);
   }
 
   void settingpage() {
