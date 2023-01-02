@@ -191,7 +191,6 @@ class _LodingState extends State<Loding> {
                   ),
                   title: Text('환경설정'),
                   onTap: settingpage
-                  //trailing: Icon(Icons.add),
                   ),
               ListTile(
                 leading: Icon(
@@ -202,7 +201,6 @@ class _LodingState extends State<Loding> {
                 onTap: () {
                   print('고객센터 is clicked');
                 },
-                //trailing: Icon(Icons.add),
               ),
               ListTile(
                 leading: Icon(
