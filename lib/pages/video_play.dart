@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter/views/home_screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VideoPlay extends StatefulWidget {
@@ -14,33 +16,27 @@ class VideoPlay extends StatefulWidget {
 }
 
 class _VideoPlayState extends State<VideoPlay> {
-  //------------------------------------------로그인 정보 가져오기---------------//
+  //----------------------------------------
+
   String userinfo = '';
   // String userid = '';
 
   
-  @override
-  void initState() {
-    loadVideoPlayer();
-    super.initState();
-    setData();
-  }
+  
 
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       userinfo = prefs.getString('id')!;
     });
-    
+   
     try {
       setState(() {
         final String? userinfo = prefs.getString('id');        
       });
     } catch (e) {}
   }
-  //-----------------------------------------------------------------여기까지---------------------
-  
-  //----------------------------------------
+
   Future<List<Video>> getSQLData() async {
     final List<Video> videoList = [];
     final Mysql db = Mysql();
@@ -63,14 +59,43 @@ class _VideoPlayState extends State<VideoPlay> {
     });
     return videoList;
   }
+
   //------------------------------------------------
-
+  // static const videos=[
+  //   Video()
+  // ];
   late VideoPlayerController controller;
+  // late VlcPlayerController  controller;
+  var urls = '';
+  // int _currentIndex =0;
 
-  
-  loadVideoPlayer() {
-    controller = VideoPlayerController.network(
-        'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
+  // void _playVideo({int index = 0, bool init = false}) {
+  //   if (index < 0 || index >= videos.length) return;
+
+  //   controller=VideoPlayerController.network(dataSource)
+  // }
+
+  @override
+  void initState() {
+    loadVideoPlayer(urls);
+    super.initState();
+    setData();
+    // _playVideo();
+  }
+
+  // void _ontaphistory(String urls) {
+  //   loadVideoPlayer(urls);
+  // }
+
+  //final video_id='http://34.64.233.244:9898/download/${data[index].file_name.toString()}';
+  // final video_id =
+  //     'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4';
+  loadVideoPlayer(String urls) {
+    //getSQLData();
+    //final data = snapshot.data as List;
+    controller = VideoPlayerController.network(urls);
+    //'http://34.64.233.244:9898/download/${data[index].file_name.toString()}'
+    //'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
     // 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
     controller.addListener(() {
       setState(() {});
@@ -78,6 +103,14 @@ class _VideoPlayState extends State<VideoPlay> {
     controller.initialize().then((value) {
       setState(() {});
     });
+    controller.setLooping(true);
+    //controller.initialize().then((value) => controller.play());
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -102,10 +135,13 @@ class _VideoPlayState extends State<VideoPlay> {
             child: VideoProgressIndicator(controller,
                 allowScrubbing: true,
                 colors: VideoProgressColors(
-                  backgroundColor: Colors.redAccent,
-                  playedColor: Colors.green,
-                  bufferedColor: Colors.purple,
-                ))),
+                    backgroundColor: Colors.blueGrey,
+                    bufferedColor: Colors.blueGrey,
+                    playedColor: Colors.blueAccent
+                    //backgroundColor: Colors.redAccent,
+                    //playedColor: Colors.green,
+                    //bufferedColor: Colors.purple,
+                    ))),
         Container(
           child: Row(
             children: [
@@ -175,6 +211,9 @@ class _VideoPlayState extends State<VideoPlay> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final data = snapshot.data as List;
+              String urls = (
+                'http://34.64.233.244:9898/download/${data[index].file_name.toString()}'
+              );
               return Card(
                   child: Container(
                       child: Column(
@@ -185,6 +224,27 @@ class _VideoPlayState extends State<VideoPlay> {
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
+                    selected: true,
+                    onTap: () {
+                      print(urls);
+                      print('http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
+                      // _ontaphistory('$urls');
+                      loadVideoPlayer(urls);
+                      // controller.dispose();
+                      //loadVideoPlayer() {
+                      //controller = VideoPlayerController.network(
+                      //    //'http://34.64.233.244:9898/download/video2022-12-21_11-05-22-372348.mp4');
+                      //    'http://34.64.233.244:9898/download/${data[index].file_name.toString()}');
+                      //// 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
+                      //controller.addListener(() {
+                      //  setState(() {});
+                      //});
+                      //controller.initialize().then((value) {
+                      //  setState(() {});
+                      //});
+                      //}
+                      //print('ss');
+                    },
                   ),
                 ],
               )));

@@ -67,6 +67,9 @@ dependencies:
   dartz: ^0.10.1
   fluttertoast: ^8.1.2
   pull_to_refresh: ^2.0.0
+  flutter_vlc_player: ^7.1.5
+  app_settings: ^4.1.8
+  wakelock: ^0.6.2
   
   
 

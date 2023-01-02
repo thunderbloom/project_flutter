@@ -154,22 +154,30 @@ void onMessage() {
   print('Message Arrived');
 }
 
-void onConnected() {
+void onConnected() async {
   NotificationService().showNotification(
     0,
     '새로운 알림이 있습니다.',
     '서버와 연결되었습니다',
   );
   print('Connected');
+  final prefs = await SharedPreferences.getInstance();
+  var isConnectedTrue = prefs.setBool('isConnectedTrue', true);
+  print(prefs.getBool('연결되었습니까? $isConnectedTrue'));
+  prefs.remove('isConnectedFalse');
 }
 
-void onDisconnected() {
+void onDisconnected() async {
   NotificationService().showNotification(
     0,
     '새로운 알림이 있습니다.',
     '서버와 연결이 해제되었습니다',
   );
   print('Disconneted');
+  final prefs = await SharedPreferences.getInstance();
+  var isConnectedFalse = prefs.setBool('isConnectedFalse', true);
+  print(prefs.getBool('연결이 해제 되었습니까? $isConnectedFalse'));
+  prefs.remove('isConnectedTrue');
 }
 
 void onSubscribed(String topic) {

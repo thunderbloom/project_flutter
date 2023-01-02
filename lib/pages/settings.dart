@@ -8,6 +8,7 @@ import 'package:project_flutter/pages/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:app_settings/app_settings.dart';
 // void main() {
 //   var isLoggedIn;
 //   runApp(MaterialApp(
@@ -97,14 +98,23 @@ class SettingPage extends State<Setting> {
   //  }
   //}
 
+ 
   onChangeFunction1(var newValue1) {
     setState(() {
       notificaation = newValue1;
 
+      // if (notificaation == false) {
+      //   flutterLocalNotificationsPlugin.cancelAll();
+      //   print('알림 꺼짐');
+      // } else {
+      //   print('알림 켜짐');
+      // }
       if (notificaation == false) {
-        flutterLocalNotificationsPlugin.cancelAll();
+        // _cancelAllNotifications;
+        AppSettings.openNotificationSettings();
         print('알림 꺼짐');
       } else {
+        AppSettings.openNotificationSettings();
         print('알림 켜짐');
       }
     });
@@ -124,13 +134,14 @@ class SettingPage extends State<Setting> {
   onChangeFunction2(var newValue2) {
     setState(() {
       locationbutton = newValue2;
-      //if (locationbutton == false) {
-      //  permission == LocationPermission.denied;
-      //  print('위치정보 꺼짐');
-      //} else {
-      //  permission == LocationPermission.whileInUse;
-      //  print('위치정보 켜짐');
-      //}
+      if (notificaation == false) {
+        // _cancelAllNotifications;
+        AppSettings.openLocationSettings();
+        print('알림 꺼짐');
+      } else {
+        AppSettings.openLocationSettings();
+        print('알림 켜짐');
+      }
     });
   }
 
@@ -142,10 +153,10 @@ class SettingPage extends State<Setting> {
         connect().then((value) {
           client = value;
         });
-        print('알림 켜짐');
+        print('연결');
       } else {
         client?.disconnect();
-        print('알림 꺼짐');
+        print('연결 해제');
       }
     });
   }
@@ -181,6 +192,7 @@ class SettingPage extends State<Setting> {
               children: [
             SizedBox(
               height: 10,
+              
             ),
             Row(
               children: [
@@ -228,7 +240,9 @@ class SettingPage extends State<Setting> {
             //           )
             //         ])),
 
+
             buildSettingOption('알림', notificaation, onChangeFunction1),
+
             buildSettingOption('위치정보', locationbutton, onChangeFunction2),
             buildSettingOption('mqtt 접속', mqttbutton, onChangeFunction3),
 
