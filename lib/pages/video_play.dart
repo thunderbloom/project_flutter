@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter/views/home_screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/mysql.dart';
@@ -36,26 +37,35 @@ class _VideoPlayState extends State<VideoPlay> {
     });
     return videoList;
   }
-  //------------------------------------------------
 
+  //------------------------------------------------
   late VideoPlayerController controller;
+  var urls = '';
 
   @override
   void initState() {
-    loadVideoPlayer();
+    loadVideoPlayer(urls);
     super.initState();
   }
 
-  loadVideoPlayer() {
-    controller = VideoPlayerController.network(
-        'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
+  loadVideoPlayer(String urls) {
+    controller = VideoPlayerController.network(urls);
+    //'http://34.64.233.244:9898/download/${data[index].file_name.toString()}'
+    //'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
     // 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
+
     controller.addListener(() {
       setState(() {});
     });
-    controller.initialize().then((value) {
+    controller.initialize().then((urls) {
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -80,10 +90,9 @@ class _VideoPlayState extends State<VideoPlay> {
             child: VideoProgressIndicator(controller,
                 allowScrubbing: true,
                 colors: VideoProgressColors(
-                  backgroundColor: Colors.redAccent,
-                  playedColor: Colors.green,
-                  bufferedColor: Colors.purple,
-                ))),
+                    backgroundColor: Colors.blueGrey,
+                    bufferedColor: Colors.blueGrey,
+                    playedColor: Colors.blueAccent))),
         Container(
           child: Row(
             children: [
@@ -120,16 +129,6 @@ class _VideoPlayState extends State<VideoPlay> {
             textAlign: TextAlign.center,
           ),
         ),
-        //new Row
-        //new Row(
-        //  children: <Widget>[
-        //    Expanded(
-        //        child: SizedBox(
-        //      height: 50,
-        //      child: getDBData(),
-        //    ))
-        //  ],
-        //)
         Container(
             child: SizedBox(
           child: getDBData(),
@@ -153,6 +152,9 @@ class _VideoPlayState extends State<VideoPlay> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final data = snapshot.data as List;
+              String urls =
+                  'http://34.64.233.244:9898/download/${data[index].file_name.toString()}';
+
               return Card(
                   child: Container(
                       child: Column(
@@ -163,28 +165,14 @@ class _VideoPlayState extends State<VideoPlay> {
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
+                    selected: true,
+                    onTap: () {
+                      print(urls);
+                      loadVideoPlayer(urls);
+                    },
                   ),
                 ],
               )));
-              //return ListTile(
-              //  leading: Text(
-              //    data[index].file_name.toString(),
-              //    style: const TextStyle(
-              //        fontSize: 20, fontWeight: FontWeight.bold),
-              //  ),
-
-              //title: Text(
-              //  data[index].Datetime.toString(),
-              //  style: const TextStyle(
-              //    fontSize: 20,
-              //    fontWeight: FontWeight.bold,
-              //  ),
-              //),
-              //subtitle: Text(
-              //  data[index].Datetime.toString(),
-              //  style: const TextStyle(fontSize: 20),
-              //),
-              //);
             },
           );
         });

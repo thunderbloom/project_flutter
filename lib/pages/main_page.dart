@@ -196,25 +196,25 @@ class _LodingState extends State<Loding> {
                   //trailing: Icon(Icons.add),
                   ),
               ListTile(
-                  leading: Icon(
-                    Icons.settings,
-                    color: Colors.grey[850],
-                  ),
-                  title: Text('환경설정'),
-                  onTap: settingpage
-                  //trailing: Icon(Icons.add),
-                  ),
-              ListTile(
                 leading: Icon(
-                  Icons.support_agent,
+                  Icons.settings,
                   color: Colors.grey[850],
                 ),
-                title: Text('고객센터'),
-                onTap: () {
-                  print('고객센터 is clicked');
-                },
+                title: Text('환경설정'),
+                onTap: settingpage,
                 //trailing: Icon(Icons.add),
               ),
+              ListTile(
+                  leading: Icon(
+                    Icons.support_agent,
+                    color: Colors.grey[850],
+                  ),
+                  title: Text('고객센터'),
+                  onTap: () {
+                    print('고객센터 is clicked');
+                  }
+                  //trailing: Icon(Icons.add),
+                  ),
               ListTile(
                 leading: Icon(
                   Icons.report, //question_answer,
