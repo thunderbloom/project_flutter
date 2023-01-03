@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/views/home_screen.dart';
 import 'package:video_player/video_player.dart';
@@ -6,6 +7,7 @@ import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VideoPlay extends StatefulWidget {
   const VideoPlay({
@@ -96,6 +98,57 @@ class _VideoPlayState extends State<VideoPlay> {
       appBar: AppBar(
         title: Text("영상 확인"),
         backgroundColor: Color(0xff1160aa),
+        actions: <Widget>[
+          TextButton(
+              child: Image.asset(
+                // width: 50,
+                // height: 35,
+                'assets/icons/live.png',
+                fit: BoxFit.fill,
+              ),
+              onPressed: () async {
+                final url = Uri.parse(
+                  'http://192.168.41.191:5000',
+                );
+                if (await canLaunchUrl(url)) {
+                  launchUrl(url);
+                } else {
+                  // ignore: avoid_print
+                  print("Can't launch $url");
+                }
+                print('live streaming clicked');
+              })
+          //CupertinoButton(
+          //    color: Colors.white,
+          //    //padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
+          //    child: Image.asset(
+          //      width: 50,
+          //      height: 35,
+          //      'assets/icons/live.png',
+          //      fit: BoxFit.fill,
+          //    ),
+          //    //Text(
+          //    //  'live',
+          //    //  style: TextStyle(
+          //    //    color: Colors.red,
+          //    //    fontSize: 25,
+          //    //    fontWeight: FontWeight.bold,
+          //    //  ),
+          //    //),
+          // onPressed: () async {
+          //   final url = Uri.parse(
+          //     'http://192.168.41.191:5000',
+          //   );
+          //   if (await canLaunchUrl(url)) {
+          //     launchUrl(url);
+          //   } else {
+          //     // ignore: avoid_print
+          //     print("Can't launch $url");
+          //   }
+          //   print('live streaming clicked');
+          // }
+          //)
+        ],
       ),
       body: Container(
           child: ListView(children: [
