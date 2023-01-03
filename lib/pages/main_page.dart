@@ -346,6 +346,8 @@ class _LodingState extends State<Loding> {
                                   children: [],
                                   //--------------------------------
                                 ),
+                            
+                                
                                 SizedBox(width: 22),
                                 DiscoverCard(
                                   tag: "register",
@@ -398,11 +400,12 @@ class _LodingState extends State<Loding> {
   }
 
   void cctv() {
-    Get.to(() => VideoPlay(), transition: Transition.rightToLeft);
+    Get.to(() => const VideoPlay(), transition: Transition.rightToLeft);
   }
   // void cctv2() {
   //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
   // }
+
 
   void adddevice1() {
     Get.to(

@@ -4,7 +4,6 @@ import 'package:video_player/video_player.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VideoPlay extends StatefulWidget {
@@ -77,7 +76,8 @@ class _VideoPlayState extends State<VideoPlay> {
 
   @override
   void initState() {
-    loadVideoPlayer(urls);
+    loadVideoPlayer('https://192.168.41.191:5000');
+    // loadVideoPlayer('http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
     super.initState();
     setData();
     // _playVideo();
@@ -129,7 +129,7 @@ class _VideoPlayState extends State<VideoPlay> {
         Container(
           //duration of video
           child:
-              Text("Total Duration: " + controller.value.duration.toString()),
+              Text("총 재생시간: " + controller.value.duration.toString()),
         ),
         Container(
             child: VideoProgressIndicator(controller,
