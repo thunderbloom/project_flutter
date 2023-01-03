@@ -66,7 +66,7 @@ class _VideoPlayState extends State<VideoPlay> {
 
   @override
   void initState() {
-    loadVideoPlayer('https://192.168.41.191:5000');
+    loadVideoPlayer(urls);
     // loadVideoPlayer('http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
     super.initState();
     setData();

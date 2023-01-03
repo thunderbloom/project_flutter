@@ -31,7 +31,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:project_flutter/pages/settings.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:project_flutter/pages/live_stream.dart';
 import '../mqtt/mqtt_client_connect.dart';
 // String userinfo = login.userinfo;
 
@@ -384,7 +384,24 @@ class _LodingState extends State<Loding> {
                                   children: [],
                                   //--------------------------------
                                 ),
-                            
+                                SizedBox(width: 22),
+                                DiscoverCard(
+                                  tag: "Live Stream",
+                                  onTap: livestream,
+                                  title: "CCTV",
+                                  subtitle: "실시간영상 확인",
+                                  gradientStartColor: Color(0xffFC67A7),
+                                  gradientEndColor: Color(0xffF6815B),
+                                  icons: SvgAsset(
+                                    assetName: AssetName.headphone,
+                                    height: 50,
+                                    width: 50,
+                                  ),
+                                  //--------------------------------
+                                  icon: SvgAsset(),
+                                  children: [],
+                                  //--------------------------------
+                                ),
                                 
                                 SizedBox(width: 22),
                                 DiscoverCard(
@@ -443,7 +460,12 @@ class _LodingState extends State<Loding> {
   // void cctv2() {
   //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
   // }
-
+  void livestream() {
+    Get.to(() => WebViewExample(), transition: Transition.rightToLeft);
+  }
+  // void cctv2() {
+  //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
+  // }
 
   void adddevice1() {
     Get.to(
