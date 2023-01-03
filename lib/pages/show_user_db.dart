@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/pages/address_page.dart';
 import 'package:project_flutter/pages/edit_mypage.dart';
+import 'package:project_flutter/pages/email_page.dart';
 import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
+import 'package:project_flutter/pages/password_page.dart';
+import 'package:project_flutter/pages/phone_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserData extends StatefulWidget {
@@ -111,29 +115,66 @@ class _UserDataState extends State<UserData> {
                       title: Text('전화번호'),
                       subtitle: Text(data[index].phonenumber.toString()),
                       leading: Icon(Icons.phone),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const PhonePage()))
+                          .then((value) {
+                            setState(() {});
+                          });
+                      },                                            
                     ),
                     ListTile(
                       title: Text('주소'),
                       subtitle: Text(data[index].address.toString()),
                       leading: Icon(Icons.location_on),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const AddressPage()))
+                          .then((value) {
+                            setState(() {});
+                          });
+                      },                      
                     ),
                     ListTile(
                       title: Text('이메일'),
                       subtitle: Text(data[index].email.toString()),
                       leading: Icon(Icons.email),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const EmailPage()))
+                          .then((value) {
+                            setState(() {});
+                          });
+                      },
                     ),
                     Divider(),
-                    SizedBox(height: 215),
-                    SizedBox(child:CupertinoButton(
-                      child: Text('회원정보 수정'), onPressed: () {
-                        Navigator.push(
-                          context, MaterialPageRoute(
-                            builder: (context) => const EditMyPage()))
-                            .then((value) {
-                              setState(() {});
-                            });
-                      }
-                    )),
+                    ListTile(
+                      title: Text('비밀번호 변경'),
+                      leading: Icon(Icons.key),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const PasswordPage()))
+                          .then((value) {
+                            setState(() {});
+                          });
+                      },
+                    ),                  
+                    
+                    // SizedBox(height: 215),
+                    // SizedBox(child:CupertinoButton(
+                    //   child: Text('회원정보 수정'), onPressed: () {
+                    //     Navigator.push(
+                    //       context, MaterialPageRoute(
+                    //         builder: (context) => const EditMyPage()))
+                    //         .then((value) {
+                    //           setState(() {});
+                    //         });
+                    //   }
+                    // )),
                   ],
                 )
               )
