@@ -118,12 +118,12 @@ class DiscoverCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          icons ??
-                              SvgAsset(
-                                assetName: AssetName.headphone,
-                                height: 24,
-                                width: 24,
-                              ),
+                          //icons ??
+                          //    SvgAsset(
+                          //      assetName: AssetName.headphone,
+                          //      height: 24,
+                          //      width: 24,
+                          //    ),
                           //    SizedBox(width: 24),
                           //    SvgAsset(
                           //      assetName: AssetName.sensor,

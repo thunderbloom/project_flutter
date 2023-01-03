@@ -19,7 +19,6 @@ class _VideoPlayState extends State<VideoPlay> {
   //----------------------------------------
 
   String userinfo = '';
-  // String userid = '';
 
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,38 +58,19 @@ class _VideoPlayState extends State<VideoPlay> {
   }
 
   //------------------------------------------------
-  // static const videos=[
-  //   Video()
-  // ];
+
   late VideoPlayerController controller;
-  // late VlcPlayerController  controller;
+
   var urls = '';
-  // int _currentIndex =0;
-
-  // void _playVideo({int index = 0, bool init = false}) {
-  //   if (index < 0 || index >= videos.length) return;
-
-  //   controller=VideoPlayerController.network(dataSource)
-  // }
 
   @override
   void initState() {
     loadVideoPlayer(urls);
     super.initState();
     setData();
-    // _playVideo();
   }
 
-  // void _ontaphistory(String urls) {
-  //   loadVideoPlayer(urls);
-  // }
-
-  //final video_id='http://34.64.233.244:9898/download/${data[index].file_name.toString()}';
-  // final video_id =
-  //     'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4';
   loadVideoPlayer(String urls) {
-    //getSQLData();
-    //final data = snapshot.data as List;
     controller = VideoPlayerController.network(urls);
     //'http://34.64.233.244:9898/download/${data[index].file_name.toString()}'
     //'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
@@ -102,8 +82,6 @@ class _VideoPlayState extends State<VideoPlay> {
     controller.initialize().then((urls) {
       setState(() {});
     });
-    controller.setLooping(true);
-    //controller.initialize().then((value) => controller.play());
   }
 
   @override

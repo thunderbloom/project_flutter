@@ -202,17 +202,6 @@ class _LodingState extends State<Loding> {
                   //trailing: Icon(Icons.add),
                   ),
               ListTile(
-                leading: Icon(
-                  Icons.settings,
-                  color: Colors.grey[850],
-                ),
-                title: Text('고객센터'),
-                onTap: () {
-                  print('고객센터 is clicked');
-                },
-                //trailing: Icon(Icons.add),
-              ),
-              ListTile(
                   leading: Icon(
                     Icons.support_agent,
                     color: Colors.grey[850],
@@ -331,11 +320,11 @@ class _LodingState extends State<Loding> {
                                   onTap: sensor,
                                   title: "알림내역",
                                   subtitle: "정보를 확인하세요!",
-                                  icons: SvgAsset(
-                                    assetName: AssetName.headphone,
-                                    height: 24,
-                                    width: 24,
-                                  ),
+                                  //icons: SvgAsset(
+                                  //  assetName: AssetName.headphone,
+                                  //  height: 24,
+                                  //  width: 24,
+                                  //),
                                   //--------------------------------
                                   icon: SvgAsset(),
                                   children: [],
