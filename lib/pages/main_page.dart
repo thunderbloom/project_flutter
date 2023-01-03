@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_indicator/carousel_indicator.dart';
@@ -29,6 +30,7 @@ import 'package:project_flutter/mqtt/mqtt_client_connect.dart' as mqtt;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:project_flutter/pages/settings.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../mqtt/mqtt_client_connect.dart';
 // String userinfo = login.userinfo;
@@ -42,6 +44,12 @@ class Loding extends StatefulWidget {
   _LodingState createState() => _LodingState();
 }
 
+class Constants {
+  Constants._();
+  static const double padding = 20;
+  static const double avatarRadius = 45;
+}
+
 class _LodingState extends State<Loding> {
   //------------------------------------------로그인 정보 가져오기---------------//
   String userinfo = '';
@@ -49,7 +57,7 @@ class _LodingState extends State<Loding> {
 
   late MqttClient client;
   @override
-  void initState() {    
+  void initState() {
     super.initState();
     setData();
   }
@@ -58,9 +66,9 @@ class _LodingState extends State<Loding> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     late MqttClient client;
     connect().then((value) {
-              // ------------------------MQTT 연결
-              client = value;
-              });
+      // ------------------------MQTT 연결
+      client = value;
+    });
     setState(() {
       userinfo = prefs.getString('id')!;
     });
@@ -73,6 +81,33 @@ class _LodingState extends State<Loding> {
     } catch (e) {}
   }
   //-----------------------------------------------------------------여기까지---------------------
+
+  void showAlertDialog() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.question,
+      animType: AnimType.BOTTOMSLIDE,
+      title: '고객센터',
+      desc: '전화연결 042-471-9222',
+      //btnCancelOnPress: () {},
+      showCloseIcon: true,
+      btnOkOnPress: () async {
+        Tel:
+        launchUrl(Uri.parse('tel:042-471-9222'));
+        final url = Uri.parse('tel:042-471-9222');
+        if (await canLaunchUrl(url)) {
+          launchUrl(url);
+        } else {
+          print("전화연결 실패 $url");
+        }
+        debugPrint('전화걸기 누름');
+        Text('전화연결');
+      },
+      btnOkIcon: Icons.call,
+    ).show();
+  }
+
+  //-----------------------------------------
   // loadCounter() async {
   //   // SharedPreferences의 인스턴스를 필드에 저장
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -190,8 +225,7 @@ class _LodingState extends State<Loding> {
                     color: Colors.grey[850],
                   ),
                   title: Text('회원정보'),
-                  onTap: mypage
-                  ),
+                  onTap: mypage),
               ListTile(
                   leading: Icon(
                     Icons.settings,
@@ -199,17 +233,21 @@ class _LodingState extends State<Loding> {
                   ),
                   title: Text('환경설정'),
                   onTap: settingpage
+
+                  //trailing: Icon(Icons.add),
                   ),
               ListTile(
-                leading: Icon(
-                  Icons.support_agent,
-                  color: Colors.grey[850],
-                ),
-                title: Text('고객센터'),
-                onTap: () {                  
-                  print('고객센터 is clicked');
-                },
-              ),
+                  leading: Icon(
+                    Icons.support_agent,
+                    color: Colors.grey[850],
+                  ),
+                  title: Text('고객센터'),
+                  onTap: showAlertDialog
+                  //() {
+                  //  print('고객센터 is clicked');
+                  //}
+                  //trailing: Icon(Icons.add),
+                  ),
               ListTile(
                 leading: Icon(
                   Icons.report, //question_answer,
@@ -426,5 +464,4 @@ class _LodingState extends State<Loding> {
   void settingpage() {
     Get.to(() => Setting(), transition: Transition.rightToLeft);
   }
-  
 }
