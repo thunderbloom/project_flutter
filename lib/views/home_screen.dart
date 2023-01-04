@@ -20,7 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color(0xff1160aa),title: Text('오늘의 날씨'),),
+      appBar: AppBar(
+        backgroundColor: Color(0xff1160aa),
+        title: Text('오늘의 날씨'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Obx(() => globalController.checkLoading().isTrue
             ? const Center(

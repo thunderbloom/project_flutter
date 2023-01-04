@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:project_flutter/pages/device_registration.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/main.dart';
+import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/show_user_db.dart';
 import 'package:project_flutter/pages/settings.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
@@ -53,6 +54,8 @@ class Constants {
 class _LodingState extends State<Loding> {
   //------------------------------------------로그인 정보 가져오기---------------//
   String userinfo = '';
+  String userIp = '';
+  String username = '';
   // String userid = '';
 
   late MqttClient client;
@@ -60,11 +63,14 @@ class _LodingState extends State<Loding> {
   void initState() {
     super.initState();
     setData();
+    setData2();
+    setData3();
   }
 
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     late MqttClient client;
+    final Mysql db = Mysql();
     connect().then((value) {
       // ------------------------MQTT 연결
       client = value;
@@ -79,6 +85,74 @@ class _LodingState extends State<Loding> {
         final String? userinfo = prefs.getString('id');
       });
     } catch (e) {}
+
+    await db.getConnection().then((conn) async {
+      await conn
+          .query(
+        "SELECT ip FROM UserIp WHERE user_id = '$userinfo'",
+      )
+          .then((result) {
+        String ip = result.toString();
+
+        String userip = ip.substring(14, ip.length - 2); // db에 저장된 비밀번호
+
+        prefs.setString('userip', userip);
+
+        print(prefs.getString('userip'));
+        // prefs.setString('password', pw);
+      });
+    });
+  }
+
+  void setData2() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    late MqttClient client;
+    final Mysql db = Mysql();
+    connect().then((value) {
+      // ------------------------MQTT 연결
+      client = value;
+    });
+    setState(() {
+      userinfo = prefs.getString('id')!;
+    });
+
+    try {
+      setState(() {
+        final String? userinfo = prefs.getString('id');
+      });
+    } catch (e) {}
+
+    await db.getConnection().then((conn) async {
+      await conn
+          .query(
+        "SELECT name FROM User WHERE user_id = '$userinfo'",
+      )
+          .then((result) {
+        String name = result.toString();
+
+        String username = name.substring(16, name.length - 2);
+
+        prefs.setString('username', username);
+        username = prefs.getString('username')!;
+        print(prefs.getString('username'));
+        print('zzzzzzzzzzzzzzzzzzzzzzzzzzz$username');
+        // prefs.setString('password', pw);
+      });
+    });
+  }
+
+  void setData3() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username')!;
+    });
+    try {
+      setState(() {
+        final String? username = prefs.getString('username');
+
+        print(username);
+      });
+    } catch (e) {}
   }
   //-----------------------------------------------------------------여기까지---------------------
 
@@ -91,6 +165,7 @@ class _LodingState extends State<Loding> {
       desc: '전화연결 042-471-9222',
       //btnCancelOnPress: () {},
       showCloseIcon: true,
+      btnOkText: '문의하기',
       btnOkOnPress: () async {
         Tel:
         launchUrl(Uri.parse('tel:042-471-9222'));
@@ -169,7 +244,7 @@ class _LodingState extends State<Loding> {
     return GetMaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('윈가드'),
+          title: Text('WINGUARD'),
           centerTitle: true, // 중앙 정렬
           elevation: 0.0,
           actions: <Widget>[
@@ -181,12 +256,19 @@ class _LodingState extends State<Loding> {
             //  },
             //),
             IconButton(
-              icon: Icon(Icons.search), // 검색 아이콘 생성
-              onPressed: () {
-                // 아이콘 버튼 실행
-                print('Search button is clicked');
-              },
-            ),
+                icon: Icon(Icons.search), // 검색 아이콘 생성
+                onPressed: () async {
+                  final url = Uri.parse(
+                    'https://www.naver.com/',
+                  );
+                  if (await canLaunchUrl(url)) {
+                    launchUrl(url);
+                  } else {
+                    // ignore: avoid_print
+                    print("Can't launch $url");
+                  }
+                  print('live streaming clicked');
+                }),
           ],
           backgroundColor: Color(0xff1160aa),
         ), //보류 (필요없을거같음)
@@ -208,8 +290,8 @@ class _LodingState extends State<Loding> {
                 //  ),
                 //],
 
-                accountName: Text("$userinfo 님"),
-                accountEmail: Text('환영합니다'),
+                accountName: Text("ID:$userinfo"),
+                accountEmail: Text('$username 님 환영합니다'),
                 onDetailsPressed: () {
                   print('arrow is clicked');
                 },
@@ -371,7 +453,7 @@ class _LodingState extends State<Loding> {
                                   tag: "cctv",
                                   onTap: cctv,
                                   title: "CCTV",
-                                  subtitle: "녹화영상 확인",
+                                  subtitle: "실시간/녹화영상 확인",
                                   gradientStartColor: Color(0xffFC67A7),
                                   gradientEndColor: Color(0xffF6815B),
                                   icons: SvgAsset(
@@ -384,31 +466,12 @@ class _LodingState extends State<Loding> {
                                   children: [],
                                   //--------------------------------
                                 ),
-                                SizedBox(width: 22),
-                                DiscoverCard(
-                                  tag: "Live Stream",
-                                  onTap: livestream,
-                                  title: "CCTV",
-                                  subtitle: "실시간영상 확인",
-                                  gradientStartColor: Color(0xffFC67A7),
-                                  gradientEndColor: Color(0xffF6815B),
-                                  icons: SvgAsset(
-                                    assetName: AssetName.headphone,
-                                    height: 50,
-                                    width: 50,
-                                  ),
-                                  //--------------------------------
-                                  icon: SvgAsset(),
-                                  children: [],
-                                  //--------------------------------
-                                ),
-                                
                                 SizedBox(width: 22),
                                 DiscoverCard(
                                   tag: "register",
                                   onTap: adddevice1,
                                   title: "기기등록",
-                                  subtitle: "+",
+                                  subtitle: "자신의 기기를 등록하세요!",
                                   gradientStartColor: Color(0xff441DFC),
                                   gradientEndColor: Color(0xffF6815B),
                                   icons: SvgAsset(
@@ -455,17 +518,8 @@ class _LodingState extends State<Loding> {
   }
 
   void cctv() {
-    Get.to(() => const VideoPlay(), transition: Transition.rightToLeft);
+    Get.to(() => const WebViewExample(), transition: Transition.rightToLeft);
   }
-  // void cctv2() {
-  //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
-  // }
-  void livestream() {
-    Get.to(() => WebViewExample(), transition: Transition.rightToLeft);
-  }
-  // void cctv2() {
-  //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
-  // }
 
   void adddevice1() {
     Get.to(

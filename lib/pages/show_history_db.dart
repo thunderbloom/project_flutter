@@ -14,12 +14,10 @@ class HistoryData extends StatefulWidget {
 }
 
 class _HistoryDataState extends State<HistoryData> {
-
   //------------------------------------------로그인 정보 가져오기---------------//
   String userinfo = '';
   // String userid = '';
 
-  
   @override
   void initState() {
     super.initState();
@@ -31,16 +29,14 @@ class _HistoryDataState extends State<HistoryData> {
     setState(() {
       userinfo = prefs.getString('id')!;
     });
-   
+
     try {
       setState(() {
-        final String? userinfo = prefs.getString('id');        
+        final String? userinfo = prefs.getString('id');
       });
     } catch (e) {}
   }
   //-----------------------------------------------------------------여기까지---------------------
-
-
 
   Future<List<History>> getSQLData() async {
     final List<History> historyList = [];
@@ -73,6 +69,7 @@ class _HistoryDataState extends State<HistoryData> {
         title: Text(
           "알림내역",
         ),
+        centerTitle: true,
         backgroundColor: Color(0xff1160aa),
       ),
       body: Center(

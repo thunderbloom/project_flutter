@@ -67,17 +67,12 @@ class _VideoPlayState extends State<VideoPlay> {
   @override
   void initState() {
     loadVideoPlayer(urls);
-    // loadVideoPlayer('http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
     super.initState();
     setData();
   }
 
   loadVideoPlayer(String urls) {
     controller = VideoPlayerController.network(urls);
-    //'http://34.64.233.244:9898/download/${data[index].file_name.toString()}'
-    //'http://34.64.233.244:9898/download/video2022-12-21_10-24-08-503542.mp4');
-    // 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
-
     controller.addListener(() {
       setState(() {});
     });
@@ -96,59 +91,30 @@ class _VideoPlayState extends State<VideoPlay> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("영상 확인"),
+        title: Text("녹화영상"),
+        centerTitle: true,
         backgroundColor: Color(0xff1160aa),
-        actions: <Widget>[
-          TextButton(
-              child: Image.asset(
-                // width: 50,
-                // height: 35,
-                'assets/icons/live.png',
-                fit: BoxFit.fill,
-              ),
-              onPressed: () async {
-                final url = Uri.parse(
-                  'http://192.168.41.191:5000',
-                );
-                if (await canLaunchUrl(url)) {
-                  launchUrl(url);
-                } else {
-                  // ignore: avoid_print
-                  print("Can't launch $url");
-                }
-                print('live streaming clicked');
-              })
-          //CupertinoButton(
-          //    color: Colors.white,
-          //    //padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-          //    child: Image.asset(
-          //      width: 50,
-          //      height: 35,
-          //      'assets/icons/live.png',
-          //      fit: BoxFit.fill,
-          //    ),
-          //    //Text(
-          //    //  'live',
-          //    //  style: TextStyle(
-          //    //    color: Colors.red,
-          //    //    fontSize: 25,
-          //    //    fontWeight: FontWeight.bold,
-          //    //  ),
-          //    //),
-          // onPressed: () async {
-          //   final url = Uri.parse(
-          //     'http://192.168.41.191:5000',
-          //   );
-          //   if (await canLaunchUrl(url)) {
-          //     launchUrl(url);
-          //   } else {
-          //     // ignore: avoid_print
-          //     print("Can't launch $url");
-          //   }
-          //   print('live streaming clicked');
-          // }
-          //)
-        ],
+        // actions: <Widget>[
+        //   TextButton(
+        //       child: Image.asset(
+        //         // width: 50,
+        //         // height: 35,
+        //         'assets/icons/live.png',
+        //         fit: BoxFit.fill,
+        //       ),
+        //       onPressed: () async {
+        //         final url = Uri.parse(
+        //           'http://192.168.41.191:5000',
+        //         );
+        //         if (await canLaunchUrl(url)) {
+        //           launchUrl(url);
+        //         } else {
+        //           // ignore: avoid_print
+        //           print("Can't launch $url");
+        //         }
+        //         print('live streaming clicked');
+        //       })
+        // ],
       ),
       body: Container(
           child: ListView(children: [
@@ -159,7 +125,7 @@ class _VideoPlayState extends State<VideoPlay> {
         Container(
           //duration of video
           child:
-              Text("총 재생시간: " + controller.value.duration.toString()),
+              Text("Total Duration: " + controller.value.duration.toString()),
         ),
         Container(
             child: VideoProgressIndicator(controller,
