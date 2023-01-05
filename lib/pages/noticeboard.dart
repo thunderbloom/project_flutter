@@ -8,16 +8,16 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:project_flutter/pages/data_table.dart';
 
-void main() => runApp(const MaterialApp(home: WebViewExample()));
+void main() => runApp(const MaterialApp(home: NoticeBoard()));
 
-class WebViewExample extends StatefulWidget {
-  const WebViewExample({super.key});
+class NoticeBoard extends StatefulWidget {
+  const NoticeBoard({super.key});
 
   @override
-  State<WebViewExample> createState() => _WebViewExampleState();
+  State<NoticeBoard> createState() => _NoticeBoard();
 }
 
-class _WebViewExampleState extends State<WebViewExample> {
+class _NoticeBoard extends State<NoticeBoard> {
   late final WebViewController controller;
   //WebViewController? controller;
   String userinfo = '';
@@ -86,13 +86,10 @@ class _WebViewExampleState extends State<WebViewExample> {
           },
         ),
       ) //http://192.168.41.191:5000
-      ..loadRequest(Uri.parse('$userIp'));
+      ..loadRequest(Uri.parse('http://34.64.233.244:9797/notice'));
     if (controller != null) {
       controller = controller;
     }
-
-    print('22222221333333331111111111111111111111111111111111$userIp');
-    print("22222221333333331111111111111111111111111111111111$userinfo");
   }
 
   @override
@@ -111,40 +108,40 @@ class _WebViewExampleState extends State<WebViewExample> {
   // #docregion webview_widget
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
-        title: Text("CCTV"),
+        title: Text("공지사항"),
+        centerTitle: true,
         backgroundColor: Color(0xff1160aa),
-        actions: <Widget>[
-          TextButton(
-              child: Image.asset(
-                'assets/icons/rec.png',
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => VideoPlay()),
-                );
-              })
-        ],
+        // actions: <Widget>[
+        //   TextButton(
+        //       child: Image.asset(
+        //         'assets/icons/rec.png',
+        //       ),
+        //       onPressed: () {
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => VideoPlay()),
+        //         );
+        //       })
+        // ],
       ),
       body: WebViewWidget(controller: controller),
-      bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/report.png',
-                width: 40,
-                height: 40,
-              ),
-              label: '신고하기',
-            ),
-          ],
-          selectedLabelStyle:
-              TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-          selectedItemColor: Colors.black,
-          onTap: showAlertDialog1),
+      // bottomNavigationBar: BottomNavigationBar(
+      //     items: [
+      //       BottomNavigationBarItem(
+      //         icon: Image.asset(
+      //           'assets/icons/report.png',
+      //           width: 40,
+      //           height: 40,
+      //         ),
+      //         label: '신고하기',
+      //       ),
+      //     ],
+      //     selectedLabelStyle:
+      //         TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+      //     selectedItemColor: Colors.black,
+      //     onTap: showAlertDialog1),
     );
   }
 }

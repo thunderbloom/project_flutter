@@ -61,14 +61,12 @@ class Video {
   });
 }
 
-class UserIp {  
+class UserIp {
   String? user_id;
   String? ip;
-  
 
-  UserIp({    
+  UserIp({
     this.user_id,
     this.ip,
-    
   });
 }

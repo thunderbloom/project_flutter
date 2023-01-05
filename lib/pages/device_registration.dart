@@ -42,11 +42,10 @@ class _Device_regis extends State<Device_re> {
     setState(() {
       userinfo = prefs.getString('id')!;
     });
-    
 
     try {
       setState(() {
-        final String? userinfo = prefs.getString('id');        
+        final String? userinfo = prefs.getString('id');
       });
     } catch (e) {}
   }
@@ -91,7 +90,6 @@ class _Device_regis extends State<Device_re> {
         appBar: AppBar(
           title: Text(
             '기기등록',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
           ),
           centerTitle: true, // 중앙 정렬
           elevation: 0.0,
@@ -173,18 +171,28 @@ class _Device_regis extends State<Device_re> {
                           return null;
                         }),
                   ),
-                  ElevatedButton(
-                    child: Text('기기등록'),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        toast(context, "기기등록 완료!");
-                        insertData();
-                        print(userinfo);
-                        // print(userinfo);
-                        //Navigator.push(context,
-                        //    MaterialPageRoute(builder: (context) => Loding()));
-                      }
-                    },
+                  SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 370,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff1160aa), // Background color
+                      ),
+                      child: Text('기기등록'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          toast(context, "기기등록 완료!");
+                          insertData();
+                          print(userinfo);
+                          // print(userinfo);
+                          //Navigator.push(context,
+                          //    MaterialPageRoute(builder: (context) => Loding()));
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
