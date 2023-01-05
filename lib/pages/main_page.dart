@@ -257,10 +257,10 @@ class _LodingState extends State<Loding> {
             //  },
             //),
             IconButton(
-                icon: Icon(Icons.search), // 검색 아이콘 생성
+                icon: Icon(Icons.home), // 검색 아이콘 생성
                 onPressed: () async {
                   final url = Uri.parse(
-                    'https://www.naver.com/',
+                    'https://www.winguard.kr/main/main.php',
                   );
                   if (await canLaunchUrl(url)) {
                     launchUrl(url);

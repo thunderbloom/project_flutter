@@ -237,10 +237,10 @@ class SettingPage extends State<Setting> {
             //           )
             //         ])),
 
-            buildSettingOption('알림', notificaation, onChangeFunction1),
+            buildSettingOption('알림설정', notificaation, onChangeFunction1),
 
             buildSettingOption('위치정보', locationbutton, onChangeFunction2),
-            buildSettingOption('mqtt 접속', mqttbutton, onChangeFunction3),
+            buildSettingOption('센서연결', mqttbutton, onChangeFunction3),
 
             SizedBox(
               height: 400,
