@@ -60,3 +60,15 @@ class Video {
     this.file_name,
   });
 }
+
+class UserIp {  
+  String? user_id;
+  String? ip;
+  
+
+  UserIp({    
+    this.user_id,
+    this.ip,
+    
+  });
+}

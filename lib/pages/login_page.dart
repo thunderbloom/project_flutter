@@ -114,7 +114,8 @@ class _LoginPageState extends State<LoginPage> {
 
         await conn
             .query(
-                "SELECT Password FROM User WHERE user_id = '${idController.text}'")
+                "SELECT Password FROM User WHERE user_id = '${idController.text}'",
+                )
             .then((result) {
           String pass = result.toString();
           String test_pass = passwordController.text.toString();
@@ -137,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
             
           if (pw == pass_decrypt) {
             print("패스워드 일치");
-            print(userinfo);
+            // print(userinfo);
             // WidgetsBinding.instance.addPostFrameCallback((_) async {
             Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) => Loding()));
@@ -170,10 +171,33 @@ class _LoginPageState extends State<LoginPage> {
               ));
             });
           
-        });
+        }
+        
+        
+
+
+
+
+
+        );
         setState(() {
           // final RxBool _isLoading = true.obs;
         });
+
+        // await conn
+        //     .query(
+        //         'select ip from UserIp where user_id="$userinfo"')
+        //     .then((result) {
+        //   String ip = result.toString();          
+        //   String userip = ip.substring(14, ip.length - 2);         
+          
+          
+        //   prefs.setString('userip', userip);
+        //   // prefs.setString('password', pw);
+        //   print(userip);
+        //   });
+        // setState(() {          
+        // });
       });
       // }
     return profileList;

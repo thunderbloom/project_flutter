@@ -20,16 +20,19 @@ class _VideoPlayState extends State<VideoPlay> {
   //----------------------------------------
 
   String userinfo = '';
+  String userIp = '';
 
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       userinfo = prefs.getString('id')!;
+      userIp = prefs.getString('userip')!;
     });
 
     try {
       setState(() {
         final String? userinfo = prefs.getString('id');
+        final String? userIp = prefs.getString('userip');   
       });
     } catch (e) {}
   }
@@ -63,6 +66,7 @@ class _VideoPlayState extends State<VideoPlay> {
   late VideoPlayerController controller;
 
   var urls = '';
+
 
   @override
   void initState() {
@@ -105,13 +109,14 @@ class _VideoPlayState extends State<VideoPlay> {
                 // height: 35,
                 'assets/icons/live.png',
                 fit: BoxFit.fill,
-              ),
+              ),//'http://192.168.41.191:5000'
               onPressed: () async {
                 final url = Uri.parse(
-                  'http://192.168.41.191:5000',
+                  '$userIp',
                 );
                 if (await canLaunchUrl(url)) {
                   launchUrl(url);
+                  print('$userIp');
                 } else {
                   // ignore: avoid_print
                   print("Can't launch $url");

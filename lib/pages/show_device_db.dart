@@ -28,6 +28,7 @@ class _DeviceDataState extends State<DeviceData> {
             //Device_Name: res["Device_Name"],
           );
           deviceList.add(deviceModel);
+          
         }
       }).onError((error, stackTrace) {
         print(error);

@@ -55,7 +55,7 @@ class _HistoryDataState extends State<HistoryData> {
             status: res["status"],
             datetime: res["datetime"],
           );
-          historyList.add(historyModel);
+          historyList.add(historyModel);          
         }
       }).onError((error, stackTrace) {
         print(error);

@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:project_flutter/pages/device_registration.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/main.dart';
+import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/show_user_db.dart';
 import 'package:project_flutter/pages/settings.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
@@ -33,6 +34,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:project_flutter/pages/live_stream.dart';
 import '../mqtt/mqtt_client_connect.dart';
+
 // String userinfo = login.userinfo;
 
 // String userinfo = login.userinfo;
@@ -53,6 +55,7 @@ class Constants {
 class _LodingState extends State<Loding> {
   //------------------------------------------로그인 정보 가져오기---------------//
   String userinfo = '';
+  String userIp = '';
   // String userid = '';
 
   late MqttClient client;
@@ -65,6 +68,7 @@ class _LodingState extends State<Loding> {
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     late MqttClient client;
+    final Mysql db = Mysql();
     connect().then((value) {
       // ------------------------MQTT 연결
       client = value;
@@ -79,7 +83,33 @@ class _LodingState extends State<Loding> {
         final String? userinfo = prefs.getString('id');
       });
     } catch (e) {}
+
+    await db.getConnection().then((conn) async {
+        
+        await conn
+            .query(
+                "SELECT ip FROM UserIp WHERE user_id = '$userinfo'",
+                )
+            .then((result) {
+          String ip = result.toString();
+          
+          String userip = ip.substring(14, ip.length - 2); // db에 저장된 비밀번호
+
+
+          
+          prefs.setString('userip', userip);
+          
+          print(prefs.getString('userip'));
+          // prefs.setString('password', pw);          
+          });
+          
+
   }
+  
+  );}
+  
+
+
   //-----------------------------------------------------------------여기까지---------------------
 
   void showAlertDialog() {
@@ -461,7 +491,7 @@ class _LodingState extends State<Loding> {
   //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
   // }
   void livestream() {
-    Get.to(() => WebViewExample(), transition: Transition.rightToLeft);
+    Get.to(() => const WebViewExample(), transition: Transition.rightToLeft);
   }
   // void cctv2() {
   //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
