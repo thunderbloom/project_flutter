@@ -51,10 +51,7 @@ class _PasswordPage extends State<PasswordPage> {
     Digest encrpytedPassword = encrypt();
     db.getConnection().then((conn) {
       String sqlQuery = 'update User set password=? where user_id=?';
-      conn.query(sqlQuery, [
-        encrpytedPassword.toString(),
-        userinfo
-      ]);
+      conn.query(sqlQuery, [encrpytedPassword.toString(), userinfo]);
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('정보를 수정했습니다.'),
@@ -80,95 +77,101 @@ class _PasswordPage extends State<PasswordPage> {
         backgroundColor: const Color(0xff1160aa),
         centerTitle: true,
         title: const Text(
-          '비밀번호', style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-          ),
+          '비밀번호',
         ),
       ),
-    body: SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 30.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 4),
-                  child: TextFormField(
-                    controller: passwordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    obscuringCharacter: "*",
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0)),
-                      hintText: '비밀번호(8자리 이상)',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '다시 입력해주세요';
-                      } else if (value.length <8) {
-                        return '글자수가 너무 적습니다. 8자리 이상 입력하세요.';
-                      }
-                      return null;
-                    },
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 30.0,
                   ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 4),
-                  child: TextFormField(
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    obscuringCharacter: "*",                    
-                    decoration: InputDecoration(
-                      hintText: '비밀번호 재입력',
-                      contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
+                    child: TextFormField(
+                      controller: passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      obscuringCharacter: "*",
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
+                        hintText: '비밀번호(8자리 이상)',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '다시 입력해주세요';
+                        } else if (value.length < 8) {
+                          return '글자수가 너무 적습니다. 8자리 이상 입력하세요.';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '다시 입력해주세요';
-                      } else if (value.length <8) {
-                        return '글자수가 너무 적습니다. 8자리 이상 입력하세요.';
-                      } else if (value != passwordController.text) {
-                        return '비밀번호가 일치하지 않습니다.';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                ElevatedButton(
-                  child: Text('확인'),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      toast(context, "수정 완료!");
-                      updatePassword();
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ],
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8, bottom: 4),
+                    child: TextFormField(
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      obscuringCharacter: "*",
+                      decoration: InputDecoration(
+                        hintText: '비밀번호 재입력',
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '다시 입력해주세요';
+                        } else if (value.length < 8) {
+                          return '글자수가 너무 적습니다. 8자리 이상 입력하세요.';
+                        } else if (value != passwordController.text) {
+                          return '비밀번호가 일치하지 않습니다.';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 370,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff1160aa), // Background color
+                      ),
+                      child: Text('확인'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          toast(context, "수정 완료!");
+                          updatePassword();
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
     );
   }
 
-    void toast(BuildContext context, String s) {}
+  void toast(BuildContext context, String s) {}
 }

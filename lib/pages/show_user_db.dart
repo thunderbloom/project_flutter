@@ -17,8 +17,8 @@ class UserData extends StatefulWidget {
 }
 
 class _UserDataState extends State<UserData> {
-    String userinfo = '';
-  
+  String userinfo = '';
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,7 @@ class _UserDataState extends State<UserData> {
 
     try {
       setState(() {
-        final String? userinfo = prefs.getString('id');        
+        final String? userinfo = prefs.getString('id');
       });
     } catch (e) {}
   }
@@ -65,17 +65,12 @@ class _UserDataState extends State<UserData> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(     
+    return Scaffold(
       appBar: AppBar(
-        centerTitle: true, // 중앙 정렬  
+        centerTitle: true, // 중앙 정렬
         elevation: 0.0,
         backgroundColor: Color(0xff1160aa),
-        title: const Text(
-          '회원정보', style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,           
-          ),
-        ),
+        title: const Text('회원정보'),
       ),
       body: getDBData(),
     );
@@ -83,105 +78,110 @@ class _UserDataState extends State<UserData> {
 
   FutureBuilder<List> getDBData() {
     return FutureBuilder<List>(
-      future: getSQLData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        }
-        return ListView.builder(
-          itemCount: snapshot.data!.length,
-          itemBuilder: (context, index) {
-            final data = snapshot.data as List;
-            return Card(
-              child: Container(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('계정 정보', style: TextStyle(color: Colors.grey)),
-                    ListTile(
-                      title: Text('아이디'),
-                      subtitle: Text(data[index].user_id.toString()),
-                      leading: Icon(Icons.people),
-                    ),
-                    ListTile(
-                      title: Text('이름'),
-                      subtitle: Text(data[index].name.toString()),
-                      leading: Icon(Icons.person),
-                    ),
-                    ListTile(
-                      title: Text('전화번호'),
-                      subtitle: Text(data[index].phonenumber.toString()),
-                      leading: Icon(Icons.phone),
-                      trailing: Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const PhonePage()))
-                          .then((value) {
-                            setState(() {});
-                          });
-                      },                                            
-                    ),
-                    ListTile(
-                      title: Text('주소'),
-                      subtitle: Text(data[index].address.toString()),
-                      leading: Icon(Icons.location_on),
-                      trailing: Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const AddressPage()))
-                          .then((value) {
-                            setState(() {});
-                          });
-                      },                      
-                    ),
-                    ListTile(
-                      title: Text('이메일'),
-                      subtitle: Text(data[index].email.toString()),
-                      leading: Icon(Icons.email),
-                      trailing: Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const EmailPage()))
-                          .then((value) {
-                            setState(() {});
-                          });
-                      },
-                    ),
-                    Divider(),
-                    ListTile(
-                      title: Text('비밀번호 변경'),
-                      leading: Icon(Icons.key),
-                      trailing: Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const PasswordPage()))
-                          .then((value) {
-                            setState(() {});
-                          });
-                      },
-                    ),                  
-                    
-                    // SizedBox(height: 215),
-                    // SizedBox(child:CupertinoButton(
-                    //   child: Text('회원정보 수정'), onPressed: () {
-                    //     Navigator.push(
-                    //       context, MaterialPageRoute(
-                    //         builder: (context) => const EditMyPage()))
-                    //         .then((value) {
-                    //           setState(() {});
-                    //         });
-                    //   }
-                    // )),
-                  ],
-                )
-              )
-            );
-          },
-        );
-      }
-    );
+        future: getSQLData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final data = snapshot.data as List;
+              return Card(
+                  child: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('계정 정보', style: TextStyle(color: Colors.grey)),
+                          ListTile(
+                            title: Text('아이디'),
+                            subtitle: Text(data[index].user_id.toString()),
+                            leading: Icon(Icons.people),
+                          ),
+                          ListTile(
+                            title: Text('이름'),
+                            subtitle: Text(data[index].name.toString()),
+                            leading: Icon(Icons.person),
+                          ),
+                          ListTile(
+                            title: Text('전화번호'),
+                            subtitle: Text(data[index].phonenumber.toString()),
+                            leading: Icon(Icons.phone),
+                            trailing: Icon(Icons.arrow_forward_ios),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const PhonePage())).then((value) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                          ListTile(
+                            title: Text('주소'),
+                            subtitle: Text(data[index].address.toString()),
+                            leading: Icon(Icons.location_on),
+                            trailing: Icon(Icons.arrow_forward_ios),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AddressPage())).then((value) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                          ListTile(
+                            title: Text('이메일'),
+                            subtitle: Text(data[index].email.toString()),
+                            leading: Icon(Icons.email),
+                            trailing: Icon(Icons.arrow_forward_ios),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EmailPage())).then((value) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                          Divider(),
+                          ListTile(
+                            title: Text('비밀번호 변경'),
+                            leading: Icon(Icons.key),
+                            trailing: Icon(Icons.arrow_forward_ios),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const PasswordPage())).then((value) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+
+                          // SizedBox(height: 215),
+                          // SizedBox(child:CupertinoButton(
+                          //   child: Text('회원정보 수정'), onPressed: () {
+                          //     Navigator.push(
+                          //       context, MaterialPageRoute(
+                          //         builder: (context) => const EditMyPage()))
+                          //         .then((value) {
+                          //           setState(() {});
+                          //         });
+                          //   }
+                          // )),
+                        ],
+                      )));
+            },
+          );
+        });
   }
 }

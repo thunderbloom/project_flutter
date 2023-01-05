@@ -38,10 +38,7 @@ class _AddressPage extends State<AddressPage> {
   void updateAddress() async {
     db.getConnection().then((conn) {
       String sqlQuery = 'update User set address=? where user_id=?';
-      conn.query(sqlQuery, [
-        addressController.text,
-        userinfo
-      ]);
+      conn.query(sqlQuery, [addressController.text, userinfo]);
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('정보를 수정했습니다.'),
@@ -67,65 +64,69 @@ class _AddressPage extends State<AddressPage> {
         backgroundColor: const Color(0xff1160aa),
         centerTitle: true,
         title: const Text(
-          '주소 변경', style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-          ),
+          '주소 변경',
         ),
       ),
-    body: SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 30.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 4),
-                  child: TextFormField(
-                    controller: addressController,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0)),
-                      hintText: '주소',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '다시 입력해주세요';
-                      }
-                      return null;
-                    }
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 30.0,
                   ),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                ElevatedButton(
-                  child: Text('확인'),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      toast(context, "수정 완료!");
-                      updateAddress();
-                      print(userinfo);
-                      Navigator.pop(context);
-                    }
-                  },
-                ),                              
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
+                    child: TextFormField(
+                        controller: addressController,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(32.0)),
+                          hintText: '주소',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '다시 입력해주세요';
+                          }
+                          return null;
+                        }),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 370,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff1160aa), // Background color
+                      ),
+                      child: Text('확인'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          toast(context, "수정 완료!");
+                          updateAddress();
+                          print(userinfo);
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
     );
   }
 
-    void toast(BuildContext context, String s) {}
+  void toast(BuildContext context, String s) {}
 }

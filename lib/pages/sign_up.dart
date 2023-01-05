@@ -13,7 +13,6 @@ import 'package:project_flutter/pages/mysql.dart';
 import 'package:project_flutter/pages/data_table.dart';
 import 'package:project_flutter/pages/signup_after.dart';
 
-
 void main() => runApp(Sign_up(
       title: 'sign up',
     ));
@@ -117,24 +116,26 @@ class _Sign_upState extends State<Sign_up> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Color(0xff1160aa),
-          elevation: 0,
-          title: Column(
-            children: <Widget>[
-              Center(
-                child: Text(
-                  '회원가입',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    height: 1.7,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    fontFamily: 'Nanum Barumpen',
-                    fontStyle: FontStyle.normal,
-                  ),
-                ),
-              )
-            ],
-          ),
+          title: Text('회원가입'),
+          centerTitle: true,
+          // elevation: 0,
+          // title: Column(
+          //   children: <Widget>[
+          //     Center(
+          //       child: Text(
+          //         '회원가입',
+          //         textAlign: TextAlign.center,
+          //         style: TextStyle(
+          //           height: 1.7,
+          //           fontWeight: FontWeight.bold,
+          //           fontSize: 25,
+          //           fontFamily: 'Nanum Barumpen',
+          //           fontStyle: FontStyle.normal,
+          //         ),
+          //       ),
+          //     )
+          //   ],
+          // ),
         ),
         resizeToAvoidBottomInset: true,
         body: SafeArea(
@@ -321,43 +322,51 @@ class _Sign_upState extends State<Sign_up> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    ElevatedButton(
-                      child: Text('회원가입'),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('회원가입 완료!'),
-                                  content: SingleChildScrollView(
-                                    child: ListBody(
-                                      children: <Widget>[
-                                        Text('로그인 페이지로 이동하시겠습니까?'),
-                                      ],
+                    SizedBox(
+                      height: 50,
+                      width: 370,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff1160aa), // Background color
+                        ),
+                        child: Text('회원가입'),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('회원가입 완료!'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          Text('로그인 페이지로 이동하시겠습니까?'),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text('확인'),
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          toast(context, "회원가입 완료!");
-                                          insertData();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      LoginPage()));
-                                        }
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        }
-                      },
-                    )
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('확인'),
+                                        onPressed: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            toast(context, "회원가입 완료!");
+                                            insertData();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()));
+                                          }
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -98,7 +98,6 @@ class SettingPage extends State<Setting> {
   //  }
   //}
 
- 
   onChangeFunction1(var newValue1) {
     setState(() {
       notificaation = newValue1;
@@ -174,15 +173,14 @@ class SettingPage extends State<Setting> {
         appBar: AppBar(
           title: Text(
             '환경설정',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
           ),
+          centerTitle: true,
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context); //뒤로가기
               },
               color: Colors.white,
-              icon: Icon(Icons.arrow_back)),
-          centerTitle: true, // 중앙 정렬
+              icon: Icon(Icons.arrow_back)), // 중앙 정렬
           elevation: 0.0,
           backgroundColor: Color(0xff1160aa),
         ),
@@ -192,7 +190,6 @@ class SettingPage extends State<Setting> {
               children: [
             SizedBox(
               height: 10,
-              
             ),
             Row(
               children: [
@@ -239,7 +236,6 @@ class SettingPage extends State<Setting> {
 
             //           )
             //         ])),
-
 
             buildSettingOption('알림', notificaation, onChangeFunction1),
 

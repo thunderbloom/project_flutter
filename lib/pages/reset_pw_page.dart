@@ -87,24 +87,26 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Color(0xff1160aa),
-            elevation: 0,
-            title: Column(
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    '비밀번호 찾기',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      height: 1.7,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      fontFamily: 'Nanum Barumpen',
-                      fontStyle: FontStyle.normal,
-                    ),
-                  ),
-                )
-              ],
-            ),
+            title: Text('비밀번호 찾기'),
+            centerTitle: true,
+            // elevation: 0,
+            // title: Column(
+            //   children: <Widget>[
+            //     Center(
+            //       child: Text(
+            //         '비밀번호 찾기',
+            //         textAlign: TextAlign.center,
+            //         style: TextStyle(
+            //           height: 1.7,
+            //           fontWeight: FontWeight.bold,
+            //           fontSize: 25,
+            //           fontFamily: 'Nanum Barumpen',
+            //           fontStyle: FontStyle.normal,
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -166,43 +168,51 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    ElevatedButton(
-                      child: Text('비밀번호 찾기'),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('알림'),
-                                  content: SingleChildScrollView(
-                                    child: ListBody(
-                                      children: <Widget>[
-                                        Text('비밀번호를 변경하시겠습니까?'),
-                                      ],
+                    SizedBox(
+                      height: 50,
+                      width: 370,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff1160aa), // Background color
+                        ),
+                        child: Text('비밀번호 찾기'),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('알림'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          Text('비밀번호를 변경하시겠습니까?'),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text('확인'),
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          toast(context, "비밀번호 찾기 완료!");
-                                          authenticate();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PassWordReset()));
-                                        }
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        }
-                      },
-                    )
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('확인'),
+                                        onPressed: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            toast(context, "비밀번호 찾기 완료!");
+                                            authenticate();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PassWordReset()));
+                                          }
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -210,5 +220,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         ));
   }
+
   void toast(BuildContext context, String s) {}
 }

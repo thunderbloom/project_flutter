@@ -25,7 +25,7 @@ class _PassWordResetState extends State<PassWordReset> {
 
     Digest sha256Result = sha.sha256.convert(bytes);
 
-    return sha256Result; 
+    return sha256Result;
   }
 
   void passwordUpdate() async {
@@ -34,7 +34,7 @@ class _PassWordResetState extends State<PassWordReset> {
       String sqlQuery =
           "UPDATE User SET password = (?) WHERE user_id = '${idController.text}'";
       conn.query(sqlQuery, [
-        encrpyted_password.toString(), 
+        encrpyted_password.toString(),
       ]);
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -83,24 +83,26 @@ class _PassWordResetState extends State<PassWordReset> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Color(0xff1160aa),
-            elevation: 0,
-            title: Column(
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    '비밀번호 변경',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      height: 1.7,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      fontFamily: 'Nanum Barumpen',
-                      fontStyle: FontStyle.normal,
-                    ),
-                  ),
-                )
-              ],
-            ),
+            title: Text('비밀번호 변경'),
+            centerTitle: true,
+            // elevation: 0,
+            // title: Column(
+            //   children: <Widget>[
+            //     Center(
+            //       child: Text(
+            //         '비밀번호 변경',
+            //         textAlign: TextAlign.center,
+            //         style: TextStyle(
+            //           height: 1.7,
+            //           fontWeight: FontWeight.bold,
+            //           fontSize: 25,
+            //           fontFamily: 'Nanum Barumpen',
+            //           fontStyle: FontStyle.normal,
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -188,43 +190,51 @@ class _PassWordResetState extends State<PassWordReset> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    ElevatedButton(
-                      child: Text('비밀번호 변경'),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('비밀번호 변경 완료!'),
-                                  content: SingleChildScrollView(
-                                    child: ListBody(
-                                      children: <Widget>[
-                                        Text('로그인 페이지로 이동하시겠습니까?'),
-                                      ],
+                    SizedBox(
+                      height: 50,
+                      width: 370,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff1160aa), // Background color
+                        ),
+                        child: Text('비밀번호 변경'),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('비밀번호 변경 완료!'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          Text('로그인 페이지로 이동하시겠습니까?'),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text('확인'),
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          toast(context, "비밀번호 변경!");
-                                          passwordUpdate();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      LoginPage()));
-                                        }
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        }
-                      },
-                    )
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('확인'),
+                                        onPressed: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            toast(context, "비밀번호 변경!");
+                                            passwordUpdate();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()));
+                                          }
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

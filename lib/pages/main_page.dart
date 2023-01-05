@@ -11,6 +11,7 @@ import 'package:project_flutter/pages/device_registration.dart';
 import 'package:project_flutter/pages/login_page.dart';
 import 'package:project_flutter/main.dart';
 import 'package:project_flutter/pages/mysql.dart';
+import 'package:project_flutter/pages/noticeboard.dart';
 import 'package:project_flutter/pages/show_user_db.dart';
 import 'package:project_flutter/pages/settings.dart';
 import 'package:project_flutter/pages/show_device_db.dart';
@@ -331,16 +332,25 @@ class _LodingState extends State<Loding> {
                   //trailing: Icon(Icons.add),
                   ),
               ListTile(
-                leading: Icon(
-                  Icons.report, //question_answer,
-                  color: Colors.grey[850],
-                ),
-                title: Text('공지사항'),
-                onTap: () {
-                  print('공지사항 is clicked');
-                },
-                //trailing: Icon(Icons.add),
-              ),
+                  leading: Icon(
+                    Icons.report, //question_answer,
+                    color: Colors.grey[850],
+                  ),
+                  title: Text('공지사항'),
+                  onTap: noticeboard
+                  //     () async {
+                  //   final url = Uri.parse(
+                  //     'http://34.64.233.244:9797/notice',
+                  //   );
+                  //   if (await canLaunchUrl(url)) {
+                  //     launchUrl(url);
+                  //   } else {
+                  //     // ignore: avoid_print
+                  //     print("Can't launch $url");
+                  //   }
+                  //   print('live streaming clicked');
+                  // }
+                  ),
               SizedBox(
                 height: 280,
               ),
@@ -535,6 +545,10 @@ class _LodingState extends State<Loding> {
 
   void mypage() {
     Get.to(() => const UserData(), transition: Transition.rightToLeft);
+  }
+
+  void noticeboard() {
+    Get.to(() => const NoticeBoard(), transition: Transition.rightToLeft);
   }
 
   void settingpage() {
