@@ -14,6 +14,8 @@ class HeaderWidget extends StatefulWidget {
 
 class _HeaderWidgetState extends State<HeaderWidget> {
   String city = "";
+  String subloc = '';
+  String city_sub = '';
   String date = DateFormat("yMMMMd").format(DateTime.now());
 
   final GlobalController globalController =
@@ -32,7 +34,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       print(placemark);
       Placemark place = placemark[0];
       setState(() {
-        city = place.locality!;
+        city = place.administrativeArea!;
+        subloc = place.subLocality!;
+        city_sub = '$city $subloc';
+        //city = place.locality!;
       });
     } catch (e) {
       print('Address was not retrieved, please fill out manually');
@@ -44,14 +49,47 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-          alignment: Alignment.topLeft,
-          child: Text(
-            city,
-            style: const TextStyle(
-                fontSize: 30, height: 2, fontWeight: FontWeight.bold),
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(left: 20.0, right: 0),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  city,
+                  style: const TextStyle(
+                      fontSize: 30, height: 2, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  subloc,
+                  style: const TextStyle(
+                      fontSize: 30, height: 2, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
         ),
+        // Container(
+        //   margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     city,
+        //     style: const TextStyle(
+        //         fontSize: 30, height: 2, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
+        // Container(
+        //   margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     subloc,
+        //     style: const TextStyle(
+        //         fontSize: 20, height: 2, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
         Container(
           margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
           alignment: Alignment.topLeft,

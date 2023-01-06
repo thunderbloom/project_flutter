@@ -12,29 +12,26 @@ import 'package:project_flutter/pages/login_page.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 Future<MqttClient> connect() async {
   final prefs = await SharedPreferences.getInstance();
-  final String? userid = prefs.getString('id'); 
+  final String? userid = prefs.getString('id');
   print(userid);
-  MqttServerClient client = 
-    // MqttServerClient.withPort('34.64.233.244', 'test999', 19883);
-    MqttServerClient.withPort('34.64.233.244', 'ayWebSocketClient_123456_33f7423c-a3b7-46b1-8a1a-26937e4a071faa', 19883);
-  client.logging(on : true);
+  MqttServerClient client =
+      // MqttServerClient.withPort('34.64.233.244', 'test999', 19883);
+      MqttServerClient.withPort(
+          '34.64.233.244',
+          'ayWebSocketClient_123456_33f7423c-a3b7-46b1-8a1a-26937e4a071faa',
+          19883);
+  client.logging(on: true);
   client.onConnected = onConnected;
   // var value = Get.arguments;
-  client.onDisconnected =  onDisconnected;
-  client.keepAlivePeriod =  65535;
+  client.onDisconnected = onDisconnected;
+  client.keepAlivePeriod = 65535;
   // client.onUnsubscribed = onUnsubscribed;
 
   client.port = 19883;
   client.onSubscribeFail = onSubscribeFail;
   client.pongCallback = pong;
-
-
-  
-  
 
   final connMess = MqttConnectMessage()
       // .withClientIdentifier("test999")
@@ -61,14 +58,12 @@ Future<MqttClient> connect() async {
     print("접속완료");
     // print(value);
     // String value;
-    // var value = UserID; 
+    // var value = UserID;
     // var value2 = Get.arguments;
     // print(value2);
-    
+
     // print(value);
     // const topic = 'house/door';
-    
-
 
     client.subscribe('$userid', MqttQos.atLeastOnce);
     // client.subscribe('test9999', MqttQos.atLeastOnce);
@@ -89,11 +84,27 @@ Future<MqttClient> connect() async {
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       var jsonPt = json.decode(pt);
       // Map<String, dynamic> jsonPt = jsonDecode(pt);
-      var sensor = jsonPt["sensor"];      
-      // var sensor2 = '';
+      var sensor = jsonPt["sensor"];
+      var sensor2 = '';
+      var status2 = '';
       // var res = {'sensor':{'door sensor':'도어센서', 'camera':'카메라'}, 'status':{'door opened':'문열림', 'person detected':'사람인식'}};
-                  
+
       var status = jsonPt["status"];
+      if (sensor == 'door') {
+        sensor2 = '현관문';
+      } else if (sensor == 'window') {
+        sensor2 = '베란다 창문';
+      } else if (sensor == 'camera') {
+        sensor2 = 'CCTV';
+      } else {}
+
+      if (status == 'open') {
+        status2 = '문열림';
+      } else if (status == 'close') {
+        status2 = '문닫힘';
+      } else if (status == 'person detected') {
+        status2 = '사람의 접근';
+      } else {}
       // var status2 = '';
       // var sensor2 = '도어 센서';
       // var status2 = '문열림';
@@ -102,8 +113,8 @@ Future<MqttClient> connect() async {
       // }
       // else if (sensor=='camera'){
       //   final sensor2 = '카메라';
-      // } 
-      
+      // }
+
       // if (status=='door opened'){
       //   const status2 = '문열림';
       // }
@@ -111,18 +122,21 @@ Future<MqttClient> connect() async {
       //   const status2 = '사람 인식';
       // }
 
-      //else {
+      // else {
       //  //final sensor = '문닫힘';
-      //} 
+      // }
       // print(payloadmsg);
       // final MqttMessage message = c[0].payload;
       // final payload =
       //   MqttPublishPayload.bytesToStringAsString(message.toString()); //.payload.message;
-      final sensor2 = "도어 센서";
-      final status2 = "문 열림";
+      // final sensor2 = "도어 센서";
+      // final status2 = "문 열림";
       // print('Received message:$payload from topic: ${c[0].topic}>');
-      NotificationService()
-      .showNotification(0, '새로운 알림이 있습니다.', '$sensor에서 $status이 감지되었습니다',);
+      NotificationService().showNotification(
+        0,
+        '새로운 알림이 있습니다.',
+        '$sensor2에서 $status2이 감지되었습니다',
+      );
       // .showNotification(0, '새로운 알림이 있습니다.', '${c[0].topic}에서 $status 되었습니다',);
       // NotificationService()
       // .showNotification(0, '새로운 알림이 있습니다.', '${c[0].topic}에서 움직임이 감지되었습니다',);
