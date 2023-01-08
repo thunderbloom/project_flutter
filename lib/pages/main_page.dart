@@ -35,7 +35,6 @@ import 'package:app_settings/app_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:project_flutter/pages/live_stream.dart';
 import '../mqtt/mqtt_client_connect.dart';
-
 // String userinfo = login.userinfo;
 
 // String userinfo = login.userinfo;
@@ -156,11 +155,6 @@ class _LodingState extends State<Loding> {
       });
     } catch (e) {}
   }
-  
-  );}
-  
-
-
   //-----------------------------------------------------------------여기까지---------------------
 
   void showAlertDialog() {
@@ -534,13 +528,7 @@ class _LodingState extends State<Loding> {
   }
 
   void cctv() {
-    Get.to(() => const VideoPlay(), transition: Transition.rightToLeft);
-  }
-  // void cctv2() {
-  //   Get.to(() => BasicPage(), transition: Transition.rightToLeft);
-  // }
-  void livestream() {
-    Get.to(() => WebViewExample(), transition: Transition.rightToLeft);
+    Get.to(() => const WebViewExample(), transition: Transition.rightToLeft);
   }
 
   void adddevice1() {
