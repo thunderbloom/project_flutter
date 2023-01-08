@@ -280,9 +280,9 @@ class _LodingState extends State<Loding> {
               UserAccountsDrawerHeader(
                 currentAccountPicture: CircleAvatar(
                   // 현재 계정 이미지 set
-                  backgroundImage: AssetImage('assets/weather/01d.png'),
+                  backgroundImage: AssetImage('assets/images/profile.png'),
                   backgroundColor: Colors.white,
-                ),
+                ), //fromARGB(255, 201, 231, 245)
                 //otherAccountsPictures: <Widget>[
                 //  // 다른 계정 이미지[] set
                 //  CircleAvatar(

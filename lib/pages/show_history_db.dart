@@ -16,6 +16,9 @@ class HistoryData extends StatefulWidget {
 class _HistoryDataState extends State<HistoryData> {
   //------------------------------------------로그인 정보 가져오기---------------//
   String userinfo = '';
+  String sensor = '';
+  String status = '';
+  String datetime = '';
   // String userid = '';
 
   @override
@@ -91,24 +94,43 @@ class _HistoryDataState extends State<HistoryData> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final data = snapshot.data as List;
+              if (data[index].sensor.toString() == 'door') {
+                sensor = '현관문';
+              } else if (data[index].sensor.toString() == 'camera') {
+                sensor = '카메라';
+              } else {
+                sensor = '베란다';
+              }
+              if (data[index].status.toString() == 'open') {
+                status = '문열림';
+              } else if (data[index].status.toString() == 'close') {
+                status = '문닫힘';
+              } else {
+                status = '사람 접근 감지';
+              }
+              datetime = data[index].datetime.toString();
+              String datetime1 = datetime.substring(0, datetime.length - 5);
               return Card(
                   child: Container(
                       child: Column(
                 children: <Widget>[
                   ListTile(
                     title: Text(
-                      data[index].status.toString(),
+                      status,
+                      //data[index].status.toString(),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     subtitle: Text(
-                      data[index].datetime.toString(),
+                      datetime1,
+                      //data[index].datetime.toString(),
                       style: const TextStyle(fontSize: 20),
                     ),
                     leading: Text(
-                      data[index].sensor.toString(),
+                      sensor,
+                      //data[index].sensor.toString(),
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
