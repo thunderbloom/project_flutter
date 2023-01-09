@@ -70,12 +70,23 @@ class _LodingState extends State<Loding> {
 
   void setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    var isconnectedTrue = prefs.getBool('isConnectedTrue');
+    
     late MqttClient client;
     final Mysql db = Mysql();
-    connect().then((value) {
+    if (isconnectedTrue == true){
+      print('aaaaaaaaaaaaaaaaaaaaaaaaaaa$isconnectedTrue');
+    }else if(isconnectedTrue == false){
+      connect().then((value) {
       // ------------------------MQTT 연결
       client = value;
+      print('bbbbbbbbbbbbbbbbbbbbbbbbbbb$isconnectedTrue');
     });
+    }else{};
+    // connect().then((value) {
+    //   // ------------------------MQTT 연결
+    //   client = value;
+    // });
     setState(() {
       userinfo = prefs.getString('id')!;
     });
@@ -107,12 +118,12 @@ class _LodingState extends State<Loding> {
 
   void setData2() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    late MqttClient client;
+   // late MqttClient client;
     final Mysql db = Mysql();
-    connect().then((value) {
-      // ------------------------MQTT 연결
-      client = value;
-    });
+    // connect().then((value) {
+    //   // ------------------------MQTT 연결
+    //   client = value;
+    // });
     setState(() {
       userinfo = prefs.getString('id')!;
     });

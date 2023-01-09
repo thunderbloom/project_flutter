@@ -178,7 +178,7 @@ void onConnected() async {
   final prefs = await SharedPreferences.getInstance();
   var isConnectedTrue = prefs.setBool('isConnectedTrue', true);
   print(prefs.getBool('연결되었습니까? $isConnectedTrue'));
-  prefs.remove('isConnectedFalse');
+  
 }
 
 void onDisconnected() async {
@@ -189,9 +189,9 @@ void onDisconnected() async {
   );
   print('Disconneted');
   final prefs = await SharedPreferences.getInstance();
-  var isConnectedFalse = prefs.setBool('isConnectedFalse', true);
-  print(prefs.getBool('연결이 해제 되었습니까? $isConnectedFalse'));
-  prefs.remove('isConnectedTrue');
+  var isConnectedTrue = prefs.setBool('isConnectedTrue', false);
+  print(prefs.getBool('연결이 해제 되었습니까? $isConnectedTrue'));
+  
 }
 
 void onSubscribed(String topic) {
